@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Row,
-  Col,
-  Card,
-  Typography,
-  Progress,
-} from "antd";
+import { Row, Col, Card, Typography, Progress } from "antd";
 import {
   RiseOutlined,
   FallOutlined,
@@ -43,31 +37,39 @@ const MetricCard: React.FC<{
   icon: React.ReactNode;
 }> = ({ title, value, change, isPositive, icon }) => (
   <Card>
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
       <div>
-        <Text type="secondary" style={{ fontSize: '14px' }}>
+        <Text type="secondary" style={{ fontSize: "14px" }}>
           {title}
         </Text>
-        <div style={{ fontSize: '24px', fontWeight: 'bold', marginTop: '8px' }}>
+        <div style={{ fontSize: "24px", fontWeight: "bold", marginTop: "8px" }}>
           {value}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginTop: '8px' }}>
+        <div
+          style={{ display: "flex", alignItems: "center", marginTop: "8px" }}
+        >
           {isPositive ? (
-            <RiseOutlined style={{ color: '#52c41a', marginRight: '4px' }} />
+            <RiseOutlined style={{ color: "#52c41a", marginRight: "4px" }} />
           ) : (
-            <FallOutlined style={{ color: '#ff4d4f', marginRight: '4px' }} />
+            <FallOutlined style={{ color: "#ff4d4f", marginRight: "4px" }} />
           )}
-          <Text style={{ 
-            color: isPositive ? '#52c41a' : '#ff4d4f',
-            fontSize: '12px'
-          }}>
+          <Text
+            style={{
+              color: isPositive ? "#52c41a" : "#ff4d4f",
+              fontSize: "12px",
+            }}
+          >
             {change}
           </Text>
         </div>
       </div>
-      <div style={{ color: '#1890ff', fontSize: '24px' }}>
-        {icon}
-      </div>
+      <div style={{ color: "#1890ff", fontSize: "24px" }}>{icon}</div>
     </div>
   </Card>
 );
@@ -136,25 +138,49 @@ const Dashboard: React.FC = () => {
         <Col xs={24} lg={8}>
           <Card title="Campaign Performance">
             <div style={{ marginTop: 16 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: 8,
+                }}
+              >
                 <Text>Summer Sale</Text>
                 <Text>85%</Text>
               </div>
               <Progress percent={85} style={{ marginBottom: 16 }} />
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: 8,
+                }}
+              >
                 <Text>Brand Awareness</Text>
                 <Text>72%</Text>
               </div>
               <Progress percent={72} style={{ marginBottom: 16 }} />
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: 8,
+                }}
+              >
                 <Text>Product Launch</Text>
                 <Text>63%</Text>
               </div>
               <Progress percent={63} style={{ marginBottom: 16 }} />
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: 8,
+                }}
+              >
                 <Text>Holiday Special</Text>
                 <Text>91%</Text>
               </div>

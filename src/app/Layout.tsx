@@ -1,17 +1,11 @@
 import React from 'react';
-import {
-  Layout as AntLayout,
-  Typography,
-  Avatar,
-  Dropdown,
-  Button,
-  Space,
-  Select,
-} from 'antd';
+import { Layout as AntLayout, Typography, Space, Button, Dropdown, Avatar } from 'antd';
 import {
   UserOutlined,
   BellOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons';
+import { useAuth } from '../shared/hooks/useAuth';
 
 const { Header, Content } = AntLayout;
 const { Title } = Typography;
@@ -20,55 +14,65 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-const companies = [
-  { value: 'company1', label: 'Company A' },
-  { value: 'company2', label: 'Company B' },
-  { value: 'company3', label: 'Company C' },
-];
+const headerStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  padding: '0 24px',
+  background: '#fff',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+};
+
+const contentStyle: React.CSSProperties = {
+  padding: '24px',
+  minHeight: 'calc(100vh - 64px)',
+  background: '#f5f5f5',
+};
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const { user, logout } = useAuth();
+
   const userMenuItems = [
     {
       key: 'profile',
       label: 'Profile',
+      icon: <UserOutlined />,
     },
     {
       key: 'settings',
       label: 'Settings',
     },
     {
+      type: 'divider' as const,
+    },
+    {
       key: 'logout',
-      label: 'Logout',
+      label: 'Sign Out',
+      icon: <LogoutOutlined />,
+      onClick: logout,
     },
   ];
 
   return (
     <AntLayout style={{ minHeight: '100vh' }}>
-      <Header style={{ 
-        padding: '0 16px', 
-        background: '#fff', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-      }}>
-        <Title level={3} style={{ margin: 0, color: '#1890ff' }}>
-          AdManager
-        </Title>
+      <Header style={headerStyle}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Title level={3} style={{ margin: 0, color: '#1890ff' }}>
+            AdManager
+          </Title>
+        </div>
         <Space>
-          <Select
-            defaultValue="company1"
-            style={{ width: 150 }}
-            options={companies}
-            placeholder="Select Company"
-          />
           <Button type="text" icon={<BellOutlined />} />
           <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
-            <Avatar icon={<UserOutlined />} />
+            <Avatar
+              src={user?.picture}
+              icon={!user?.picture ? <UserOutlined /> : undefined}
+              style={{ cursor: 'pointer' }}
+            />
           </Dropdown>
         </Space>
       </Header>
-      <Content style={{ padding: '24px', background: '#f0f2f5' }}>
+      <Content style={contentStyle}>
         {children}
       </Content>
     </AntLayout>
