@@ -1,6 +1,10 @@
 import { ConfigProvider } from 'antd';
 import { Layout } from './Layout';
 import { DashboardPage } from '../pages/dashboard';
+import { AuthProvider } from '../shared/hooks/useAuth';
+import { GoogleOAuthProvider } from '../shared/components/GoogleOAuthProvider';
+import { ProtectedRoute } from '../shared/components/ProtectedRoute';
+import { AUTH_CONFIG } from '../shared/config/auth';
 
 const theme = {
   token: {
@@ -14,11 +18,17 @@ const theme = {
 
 const App = () => {
   return (
-    <ConfigProvider theme={theme}>
-      <Layout>
-        <DashboardPage />
-      </Layout>
-    </ConfigProvider>
+    <GoogleOAuthProvider clientId={AUTH_CONFIG.GOOGLE_CLIENT_ID}>
+      <AuthProvider>
+        <ConfigProvider theme={theme}>
+          <ProtectedRoute>
+            <Layout>
+              <DashboardPage />
+            </Layout>
+          </ProtectedRoute>
+        </ConfigProvider>
+      </AuthProvider>
+    </GoogleOAuthProvider>
   );
 };
 
