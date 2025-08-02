@@ -45,26 +45,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const loginWithGoogle = async () => {
-    setIsLoading(true);
     try {
       // Check if Google Identity Services is loaded
       if (!window.google) {
         throw new Error(
-          "Google Identity Services is not loaded. Please check your internet connection."
+          "Google Identity Services is not loaded. Please check your internet connection and refresh the page."
         );
       }
 
       const accounts = window.google.accounts;
       if (!accounts) {
         throw new Error(
-          "Google Accounts is not available. Please refresh the page."
+          "Google Accounts is not available. Please refresh the page and try again."
         );
       }
 
       // Use new Google Identity Services API
       const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
       if (!clientId) {
-        throw new Error("Google Client ID is not configured.");
+        throw new Error("Google Client ID is not configured. Please contact support.");
       }
 
       // Create Promise for handling authentication
@@ -88,12 +87,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
               setUser(userData);
               localStorage.setItem("admanager_user", JSON.stringify(userData));
-              setIsLoading(false);
               resolve();
             } catch (error) {
               console.error("Error processing Google response:", error);
-              setIsLoading(false);
-              reject(new Error("Error processing user data"));
+              reject(new Error("Failed to process user data. Please try again."));
             }
           },
           auto_select: false,
@@ -105,28 +102,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           accounts.id.prompt();
         } catch (error) {
           console.error("Error starting authentication:", error);
-          setIsLoading(false);
-          reject(new Error("Failed to start authentication process"));
+          reject(new Error("Failed to start authentication process. Please try again."));
         }
       });
     } catch (error) {
       console.error("Google login error:", error);
-      setIsLoading(false);
 
       // More detailed error messages
       if (error instanceof Error) {
-        if (error.message.includes("popup_closed_by_user")) {
-          throw new Error(
-            "Authentication window was closed. Please try again."
-          );
-        } else if (error.message.includes("access_denied")) {
-          throw new Error("Access was denied. Please try again.");
-        } else if (error.message.includes("immediate_failed")) {
-          throw new Error("Authentication failed. Please try again.");
-        } else if (error.message.includes("CORS")) {
-          throw new Error(
-            "CORS issue. Please check Google Cloud Console settings."
-          );
+        const errorMessage = error.message.toLowerCase();
+        
+        if (errorMessage.includes("popup_closed_by_user")) {
+          throw new Error("Authentication window was closed. Please try again.");
+        } else if (errorMessage.includes("access_denied")) {
+          throw new Error("Access was denied. Please grant the required permissions and try again.");
+        } else if (errorMessage.includes("immediate_failed")) {
+          throw new Error("Authentication failed. Please check your credentials and try again.");
+        } else if (errorMessage.includes("cors")) {
+          throw new Error("Configuration error. Please contact support.");
+        } else if (errorMessage.includes("network")) {
+          throw new Error("Network error. Please check your internet connection and try again.");
+        } else if (errorMessage.includes("timeout")) {
+          throw new Error("Authentication timed out. Please try again.");
+        } else if (errorMessage.includes("invalid_client")) {
+          throw new Error("Configuration error. Please contact support.");
+        } else if (errorMessage.includes("unauthorized_client")) {
+          throw new Error("Authentication not authorized. Please contact support.");
         }
       }
 
