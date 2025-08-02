@@ -1,4 +1,5 @@
 import React from "react";
+import { Spin } from "antd";
 import { useAuth } from "../hooks/useAuth";
 import { AuthPage } from "../../pages/auth";
 
@@ -19,7 +20,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
           height: "100vh",
         }}
       >
-        <div>Загрузка...</div>
+        <Spin size="large" />
       </div>
     );
   }
