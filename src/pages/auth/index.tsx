@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Typography, Divider, Space, Alert, Spin } from "antd";
+import { Card, Button, Typography, Space, Alert, Spin } from "antd";
 import { GoogleOutlined } from "@ant-design/icons";
 import { useAuth } from "../../shared/hooks/useAuth";
 
 const { Title, Text } = Typography;
 
 export const AuthPage: React.FC = () => {
-  const { loginWithGoogle, isAuthenticated, isLoading: globalLoading } = useAuth();
+  const {
+    loginWithGoogle,
+    isAuthenticated,
+    isLoading: globalLoading,
+  } = useAuth();
   const [isFormLoading, setIsFormLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +24,7 @@ export const AuthPage: React.FC = () => {
   const handleGoogleLogin = async () => {
     setError(null);
     setIsFormLoading(true);
-    
+
     try {
       await loginWithGoogle();
       // Success - redirect will happen automatically via useEffect
@@ -96,10 +100,6 @@ export const AuthPage: React.FC = () => {
           >
             {isFormLoading ? "Signing in..." : "Sign in with Google"}
           </Button>
-
-          <Divider>
-            <Text type="secondary">or</Text>
-          </Divider>
 
           {error && (
             <Alert
