@@ -57,9 +57,9 @@ export const CampaignLauncher: React.FC = () => {
 
   return (
     <div>
-      <Row gutter={[24, 24]}>
+      <Row gutter={[16, 16]}>
         <Col xs={24} lg={12}>
-          <Card title="Campaign Setup">
+          <Card title="Campaign Setup" size="small">
             <Form form={form} layout="vertical" onFinish={onFinish}>
               <Form.Item
                 name="name"
@@ -131,7 +131,7 @@ export const CampaignLauncher: React.FC = () => {
         </Col>
 
         <Col xs={24} lg={12}>
-          <Card title="AI Performance Prediction">
+          <Card title="AI Performance Prediction" size="small">
             {prediction ? (
               <Space
                 direction="vertical"
@@ -145,7 +145,7 @@ export const CampaignLauncher: React.FC = () => {
                   showIcon
                 />
 
-                <Row gutter={[16, 16]}>
+                <Row gutter={[12, 12]}>
                   <Col span={12}>
                     <Card size="small">
                       <div style={{ textAlign: "center" }}>

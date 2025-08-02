@@ -44,10 +44,10 @@ export const MetricsOverview: React.FC = () => {
   ];
 
   return (
-    <Row gutter={[16, 16]}>
+    <Row gutter={[12, 12]}>
       {metrics.map((metric, index) => (
         <Col xs={24} sm={12} lg={6} key={index}>
-          <Card>
+          <Card size="small">
             <Statistic
               title={metric.title}
               value={metric.value}
