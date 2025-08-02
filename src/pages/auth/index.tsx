@@ -1,30 +1,43 @@
-import React, { useState } from "react";
-import { Card, Button, Typography, Divider, Space, Alert } from "antd";
+import React, { useState, useEffect } from "react";
+import { Card, Button, Typography, Divider, Space, Alert, Spin } from "antd";
 import { GoogleOutlined } from "@ant-design/icons";
 import { useAuth } from "../../shared/hooks/useAuth";
-import { AuthError } from "../../shared/components/AuthError";
 
 const { Title, Text } = Typography;
 
 export const AuthPage: React.FC = () => {
-  const { loginWithGoogle, isAuthenticated, isLoading } = useAuth();
+  const { loginWithGoogle, isAuthenticated, isLoading: globalLoading } = useAuth();
+  const [isFormLoading, setIsFormLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Auto redirect when authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      window.location.href = "/dashboard";
+    }
+  }, [isAuthenticated]);
 
   const handleGoogleLogin = async () => {
     setError(null);
+    setIsFormLoading(true);
+    
     try {
       await loginWithGoogle();
+      // Success - redirect will happen automatically via useEffect
     } catch (error) {
       console.error("Google login failed:", error);
       setError(
         error instanceof Error
           ? error.message
-          : "An error occurred during login"
+          : "An error occurred during login. Please try again."
       );
+    } finally {
+      setIsFormLoading(false);
     }
   };
 
-  if (isAuthenticated) {
+  // Show loading spinner while checking authentication status
+  if (globalLoading) {
     return (
       <div
         style={{
@@ -32,9 +45,10 @@ export const AuthPage: React.FC = () => {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         }}
       >
-        <div>Redirecting...</div>
+        <Spin size="large" />
       </div>
     );
   }
@@ -71,7 +85,8 @@ export const AuthPage: React.FC = () => {
             size="large"
             icon={<GoogleOutlined />}
             onClick={handleGoogleLogin}
-            loading={isLoading}
+            loading={isFormLoading}
+            disabled={isFormLoading}
             style={{
               width: "100%",
               height: 48,
@@ -79,14 +94,24 @@ export const AuthPage: React.FC = () => {
               borderColor: "#4285f4",
             }}
           >
-            Sign in with Google
+            {isFormLoading ? "Signing in..." : "Sign in with Google"}
           </Button>
 
           <Divider>
             <Text type="secondary">or</Text>
           </Divider>
 
-          {error && <AuthError error={error} onRetry={handleGoogleLogin} />}
+          {error && (
+            <Alert
+              message="Authentication Error"
+              description={error}
+              type="error"
+              showIcon
+              closable
+              onClose={() => setError(null)}
+              style={{ marginBottom: 16 }}
+            />
+          )}
 
           <Alert
             message="Secure Authentication"
