@@ -1,10 +1,13 @@
 import { ConfigProvider } from "antd";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Layout } from "./Layout";
 import { AuthProvider } from "../shared/hooks/useAuth";
 import { GoogleOAuthProvider } from "../shared/components/GoogleOAuthProvider";
 import { ProtectedRoute } from "../shared/components/ProtectedRoute";
 import { AUTH_CONFIG } from "../shared/config/auth";
 import { DashboardPage } from "../pages/dashboard";
+import { CampaignAnalysisPage } from "../pages/campaign-analysis";
+import { SettingsPage } from "../pages/settings";
 
 const theme = {
   token: {
@@ -21,11 +24,17 @@ const App = () => {
     <GoogleOAuthProvider clientId={AUTH_CONFIG.GOOGLE_CLIENT_ID}>
       <AuthProvider>
         <ConfigProvider theme={theme}>
-          <ProtectedRoute>
-            <Layout>
-              <DashboardPage />
-            </Layout>
-          </ProtectedRoute>
+          <Router>
+            <ProtectedRoute>
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<DashboardPage />} />
+                  <Route path="/campaign-analysis" element={<CampaignAnalysisPage />} />
+                  <Route path="/settings" element={<SettingsPage />} />
+                </Routes>
+              </Layout>
+            </ProtectedRoute>
+          </Router>
         </ConfigProvider>
       </AuthProvider>
     </GoogleOAuthProvider>
