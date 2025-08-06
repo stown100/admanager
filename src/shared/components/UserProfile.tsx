@@ -1,9 +1,19 @@
 import React from "react";
-import { Card, Avatar, Typography, Space, Button } from "antd";
-import { UserOutlined, MailOutlined, LogoutOutlined } from "@ant-design/icons";
+import {
+  Card,
+  CardContent,
+  Avatar,
+  Typography,
+  Button,
+  Box,
+  Divider,
+} from "@mui/material";
+import {
+  Person as PersonIcon,
+  Email as EmailIcon,
+  Logout as LogoutIcon,
+} from "@mui/icons-material";
 import { useAuth } from "../hooks/useAuth";
-
-const { Title, Text } = Typography;
 
 export const UserProfile: React.FC = () => {
   const { user, logout } = useAuth();
@@ -13,38 +23,53 @@ export const UserProfile: React.FC = () => {
   }
 
   return (
-    <Card style={{ width: 300 }}>
-      <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-        <div style={{ textAlign: "center" }}>
+    <Card sx={{ width: 300 }}>
+      <CardContent>
+        <Box sx={{ textAlign: "center", mb: 2 }}>
           <Avatar
-            size={64}
             src={user.picture}
-            icon={!user.picture ? <UserOutlined /> : undefined}
-          />
-          <Title level={4} style={{ marginTop: 16, marginBottom: 8 }}>
+            sx={{ width: 64, height: 64, mx: "auto", mb: 2 }}
+          >
+            {!user.picture && <PersonIcon />}
+          </Avatar>
+          <Typography variant="h6" sx={{ mb: 1 }}>
             {user.name}
-          </Title>
-          <Text type="secondary">
-            <MailOutlined /> {user.email}
-          </Text>
-        </div>
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 0.5,
+            }}
+          >
+            <EmailIcon sx={{ fontSize: 16 }} />
+            {user.email}
+          </Typography>
+        </Box>
 
-        <div>
-          <Text type="secondary" style={{ fontSize: 12 }}>
-            ID пользователя: {user.id}
-          </Text>
-        </div>
+        <Divider sx={{ my: 2 }} />
+
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ display: "block", mb: 2 }}
+        >
+          ID пользователя: {user.id}
+        </Typography>
 
         <Button
-          type="primary"
-          danger
-          icon={<LogoutOutlined />}
+          variant="contained"
+          color="error"
+          startIcon={<LogoutIcon />}
           onClick={logout}
-          style={{ width: "100%" }}
+          fullWidth
         >
           Выйти
         </Button>
-      </Space>
+      </CardContent>
     </Card>
   );
 };

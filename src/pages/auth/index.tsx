@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Typography, Space, Alert, Spin } from "antd";
-import { GoogleOutlined } from "@ant-design/icons";
+import {
+  Card,
+  CardContent,
+  Button,
+  Typography,
+  Box,
+  Alert,
+  CircularProgress,
+  Link,
+} from "@mui/material";
+import { Google as GoogleIcon } from "@mui/icons-material";
 import { useAuth } from "../../shared/hooks/useAuth";
-
-const { Title, Text } = Typography;
 
 export const AuthPage: React.FC = () => {
   const {
@@ -43,8 +50,8 @@ export const AuthPage: React.FC = () => {
   // Show loading spinner while checking authentication status
   if (globalLoading) {
     return (
-      <div
-        style={{
+      <Box
+        sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -52,14 +59,14 @@ export const AuthPage: React.FC = () => {
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         }}
       >
-        <Spin size="large" />
-      </div>
+        <CircularProgress size={60} />
+      </Box>
     );
   }
 
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -69,33 +76,36 @@ export const AuthPage: React.FC = () => {
       }}
     >
       <Card
-        style={{
+        sx={{
           width: "100%",
           maxWidth: 400,
           boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-          borderRadius: 12,
+          borderRadius: 3,
         }}
       >
-        <Space direction="vertical" size="large" style={{ width: "100%" }}>
-          <div style={{ textAlign: "center" }}>
-            <Title level={2} style={{ marginBottom: 8 }}>
+        <CardContent sx={{ p: 4 }}>
+          <Box sx={{ textAlign: "center", mb: 4 }}>
+            <Typography variant="h4" sx={{ mb: 1 }}>
               Welcome
-            </Title>
-            <Text type="secondary">Sign in to access the dashboard</Text>
-          </div>
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Sign in to access the dashboard
+            </Typography>
+          </Box>
 
           <Button
-            type="primary"
+            variant="contained"
             size="large"
-            icon={<GoogleOutlined />}
+            startIcon={<GoogleIcon />}
             onClick={handleGoogleLogin}
-            loading={isFormLoading}
             disabled={isFormLoading}
-            style={{
-              width: "100%",
+            fullWidth
+            sx={{
               height: 48,
-              background: "#4285f4",
-              borderColor: "#4285f4",
+              backgroundColor: "#4285f4",
+              "&:hover": {
+                backgroundColor: "#3367d6",
+              },
             }}
           >
             {isFormLoading ? "Signing in..." : "Sign in with Google"}
@@ -103,37 +113,33 @@ export const AuthPage: React.FC = () => {
 
           {error && (
             <Alert
-              message="Authentication Error"
-              description={error}
-              type="error"
-              showIcon
-              closable
+              severity="error"
+              sx={{ mt: 2, mb: 2 }}
               onClose={() => setError(null)}
-              style={{ marginBottom: 16 }}
-            />
+            >
+              {error}
+            </Alert>
           )}
 
-          <Alert
-            message="Secure Authentication"
-            description="We use Google OAuth for secure authentication. Your data is protected."
-            type="info"
-            showIcon
-          />
+          <Alert severity="info" sx={{ mt: 2, mb: 2 }}>
+            We use Google OAuth for secure authentication. Your data is
+            protected.
+          </Alert>
 
-          <div style={{ marginTop: 16 }}>
-            <Text type="secondary" style={{ fontSize: 12 }}>
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="caption" color="text.secondary">
               By signing in, you agree to our{" "}
-              <a href="#" style={{ color: "#1890ff" }}>
+              <Link href="#" color="primary">
                 Terms of Service
-              </a>{" "}
+              </Link>{" "}
               and{" "}
-              <a href="#" style={{ color: "#1890ff" }}>
+              <Link href="#" color="primary">
                 Privacy Policy
-              </a>
-            </Text>
-          </div>
-        </Space>
+              </Link>
+            </Typography>
+          </Box>
+        </CardContent>
       </Card>
-    </div>
+    </Box>
   );
 };

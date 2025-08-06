@@ -1,101 +1,121 @@
 import React from "react";
 import {
-  Layout as AntLayout,
+  AppBar,
+  Toolbar,
   Typography,
-  Space,
-  Button,
-  Dropdown,
+  IconButton,
   Avatar,
-} from "antd";
-import { UserOutlined, BellOutlined, LogoutOutlined } from "@ant-design/icons";
+  Menu,
+  MenuItem,
+  Box,
+  Container,
+} from "@mui/material";
+import {
+  Notifications as NotificationsIcon,
+  AccountCircle as AccountCircleIcon,
+  Logout as LogoutIcon,
+  Person as PersonIcon,
+  Settings as SettingsIcon,
+} from "@mui/icons-material";
 import { useAuth } from "../shared/hooks/useAuth";
+import { styled } from "@mui/material/styles";
 
-const { Header, Content } = AntLayout;
-const { Title } = Typography;
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  background: "#fff",
+  color: "#000",
+  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+}));
+
+const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-between",
+  maxWidth: 1350,
+  margin: "0 auto",
+  width: "100%",
+}));
+
+const StyledContainer = styled(Container)(({ theme }) => ({
+  paddingTop: theme.spacing(8),
+  paddingBottom: theme.spacing(2),
+  minHeight: "calc(100vh - 64px)",
+  background: "#f5f5f5",
+}));
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-const headerStyle: React.CSSProperties = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  padding: "0 20px",
-  background: "#fff",
-  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-  position: "fixed",
-  top: 0,
-  left: 0,
-  right: 0,
-  zIndex: 1000,
-  width: "100%",
-};
-
-const headerContentStyle: React.CSSProperties = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  maxWidth: 1350,
-  margin: "0 auto",
-  width: "100%",
-};
-
-const contentStyle: React.CSSProperties = {
-  padding: "16px",
-  minHeight: "calc(100vh - 64px)",
-  background: "#f5f5f5",
-  marginTop: 64,
-};
-
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, logout } = useAuth();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const userMenuItems = [
-    {
-      key: "profile",
-      label: "Profile",
-      icon: <UserOutlined />,
-    },
-    {
-      key: "settings",
-      label: "Settings",
-    },
-    {
-      type: "divider" as const,
-    },
-    {
-      key: "logout",
-      label: "Sign Out",
-      icon: <LogoutOutlined />,
-      onClick: logout,
-    },
-  ];
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleClose();
+  };
 
   return (
-    <AntLayout style={{ minHeight: "100vh" }}>
-      <div style={{ background: "#fff" }}>
-        <Header style={headerStyle}>
-          <div style={headerContentStyle}>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Title level={3} style={{ margin: 0, color: "#1890ff" }}>
-                AdManager
-              </Title>
-            </div>
-            <Space>
-              <Button type="text" icon={<BellOutlined />} />
-              <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
-                <Avatar
-                  src={user?.picture}
-                  icon={!user?.picture ? <UserOutlined /> : undefined}
-                  style={{ cursor: "pointer" }}
-                />
-              </Dropdown>
-            </Space>
-          </div>
-        </Header>
-      </div>
-      <Content style={contentStyle}>{children}</Content>
-    </AntLayout>
+    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <StyledAppBar position="fixed">
+        <StyledToolbar>
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{ color: "#1890ff", fontWeight: 600 }}
+          >
+            AdManager
+          </Typography>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <IconButton color="inherit">
+              <NotificationsIcon />
+            </IconButton>
+
+            <IconButton onClick={handleMenu} color="inherit">
+              <Avatar src={user?.picture} sx={{ width: 32, height: 32 }}>
+                {!user?.picture && <AccountCircleIcon />}
+              </Avatar>
+            </IconButton>
+          </Box>
+        </StyledToolbar>
+      </StyledAppBar>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <MenuItem onClick={handleClose}>
+          <PersonIcon sx={{ mr: 1 }} />
+          Profile
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <SettingsIcon sx={{ mr: 1 }} />
+          Settings
+        </MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <LogoutIcon sx={{ mr: 1 }} />
+          Sign Out
+        </MenuItem>
+      </Menu>
+
+      <StyledContainer maxWidth={false}>{children}</StyledContainer>
+    </Box>
   );
 };

@@ -1,44 +1,43 @@
 import React from "react";
-import { Card } from "antd";
+import { Box, Grow } from "@mui/material";
 import { MetricsOverview } from "../../widgets/metrics-overview";
 import { PlatformComparison } from "../../widgets/platform-comparison";
 import { PerformanceChart } from "../../widgets/performance-chart";
-import { CampaignLauncher } from "../../features/campaign-launcher";
 import { OrganicGrowthReminder } from "../../components/OrganicGrowthReminder";
 import { RecommendationsBlock } from "../../components/RecommendationsBlock";
 
 export const DashboardPage: React.FC = () => {
   return (
-    <div style={{ maxWidth: 1350, margin: "0 auto" }}>
-      <div style={{ marginBottom: 16 }}>
-        <OrganicGrowthReminder />
-      </div>
+    <Box sx={{ maxWidth: 1350, margin: "0 auto", p: 2 }}>
+      <Grow in timeout={800}>
+        <Box sx={{ mb: 2 }}>
+          <OrganicGrowthReminder />
+        </Box>
+      </Grow>
 
-      <div style={{ marginBottom: 16 }}>
-        <MetricsOverview />
-      </div>
+      <Grow in timeout={1000}>
+        <Box sx={{ mb: 2 }}>
+          <MetricsOverview />
+        </Box>
+      </Grow>
 
-      <div style={{ marginBottom: 16 }}>
-        <RecommendationsBlock />
-      </div>
+      <Grow in timeout={1200}>
+        <Box sx={{ mb: 2 }}>
+          <RecommendationsBlock />
+        </Box>
+      </Grow>
 
-      <div style={{ marginBottom: 16 }}>
-        <Card title="Platform Comparison" style={{ height: "100%" }}>
+      <Grow in timeout={1400}>
+        <Box sx={{ mb: 2 }}>
           <PlatformComparison />
-        </Card>
-      </div>
+        </Box>
+      </Grow>
 
-      <div style={{ marginBottom: 16 }}>
-        <Card title="Performance Trends" style={{ height: "100%" }}>
+      <Grow in timeout={1600}>
+        <Box sx={{ mb: 2 }}>
           <PerformanceChart />
-        </Card>
-      </div>
-
-      <div>
-        <Card title="Campaign Management">
-          <CampaignLauncher />
-        </Card>
-      </div>
-    </div>
+        </Box>
+      </Grow>
+    </Box>
   );
 };

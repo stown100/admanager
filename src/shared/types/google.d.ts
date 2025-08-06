@@ -58,4 +58,4 @@ interface GoogleAuthResponse {
   expires_at: number;
 }
 
-export {}; 
+export {};
