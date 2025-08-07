@@ -1,34 +1,24 @@
-import { ConfigProvider } from "antd";
 import { Layout } from "./Layout";
 import { AuthProvider } from "../shared/hooks/useAuth";
 import { GoogleOAuthProvider } from "../shared/components/GoogleOAuthProvider";
 import { ProtectedRoute } from "../shared/components/ProtectedRoute";
+import { ThemeProvider } from "../shared/context/ThemeContext";
 import { AUTH_CONFIG } from "../shared/config/auth";
 import { DashboardPage } from "../pages/dashboard";
 
-const theme = {
-  token: {
-    colorPrimary: "#1890ff",
-    colorSuccess: "#52c41a",
-    colorWarning: "#faad14",
-    colorError: "#ff4d4f",
-    borderRadius: 6,
-  },
-};
-
 const App = () => {
   return (
-    <GoogleOAuthProvider clientId={AUTH_CONFIG.GOOGLE_CLIENT_ID}>
-      <AuthProvider>
-        <ConfigProvider theme={theme}>
+    <ThemeProvider>
+      <GoogleOAuthProvider clientId={AUTH_CONFIG.GOOGLE_CLIENT_ID}>
+        <AuthProvider>
           <ProtectedRoute>
             <Layout>
               <DashboardPage />
             </Layout>
           </ProtectedRoute>
-        </ConfigProvider>
-      </AuthProvider>
-    </GoogleOAuthProvider>
+        </AuthProvider>
+      </GoogleOAuthProvider>
+    </ThemeProvider>
   );
 };
 

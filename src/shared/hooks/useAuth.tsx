@@ -11,6 +11,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  isLoggingIn: boolean;
   loginWithGoogle: () => Promise<void>;
   logout: () => void;
 }
@@ -30,21 +31,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
+  // Check for existing user data on mount
   useEffect(() => {
-    const savedUser = localStorage.getItem("admanager_user");
+    const savedUser = localStorage.getItem("roiable_user");
     if (savedUser) {
       try {
-        setUser(JSON.parse(savedUser));
+        const userData = JSON.parse(savedUser);
+        setUser(userData);
       } catch (error) {
-        console.error("Error parsing saved user:", error);
-        localStorage.removeItem("admanager_user");
+        console.error("Error parsing saved user data:", error);
+        localStorage.removeItem("roiable_user");
       }
     }
-    setIsLoading(false);
+    
+    // Set loading to false after a short delay to ensure Google services are loaded
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const loginWithGoogle = async () => {
+    setIsLoggingIn(true);
     try {
       // Check if Google Identity Services is loaded
       if (!window.google) {
@@ -86,10 +97,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
               };
 
               setUser(userData);
-              localStorage.setItem("admanager_user", JSON.stringify(userData));
+              localStorage.setItem("roiable_user", JSON.stringify(userData));
+              setIsLoggingIn(false);
               resolve();
             } catch (error) {
               console.error("Error processing Google response:", error);
+              setIsLoggingIn(false);
               reject(new Error("Failed to process user data. Please try again."));
             }
           },
@@ -102,11 +115,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           accounts.id.prompt();
         } catch (error) {
           console.error("Error starting authentication:", error);
+          setIsLoggingIn(false);
           reject(new Error("Failed to start authentication process. Please try again."));
         }
       });
     } catch (error) {
       console.error("Google login error:", error);
+      setIsLoggingIn(false);
 
       // More detailed error messages
       if (error instanceof Error) {
@@ -137,7 +152,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("admanager_user");
+    setIsLoading(false);
+    setIsLoggingIn(false);
+    localStorage.removeItem("roiable_user");
 
     // Remove Google Sign-In container
     const container = document.getElementById("google-signin-container");
@@ -155,6 +172,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     user,
     isAuthenticated: !!user,
     isLoading,
+    isLoggingIn,
     loginWithGoogle,
     logout,
   };

@@ -1,172 +1,321 @@
-import React from "react";
-import { Card, Button, Typography, Progress } from "antd";
+import React, { useState } from "react";
 import {
-  HeartOutlined,
-  UserOutlined,
-  CloseOutlined,
-  RiseOutlined,
-  AimOutlined,
-} from "@ant-design/icons";
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  LinearProgress,
+  IconButton,
+  Box,
+  Chip,
+  Fade,
+  Grow,
+} from "@mui/material";
+import {
+  TrendingUp as TrendingUpIcon,
+  Favorite as FavoriteIcon,
+  Close as CloseIcon,
+  Person as PersonIcon,
+  Lightbulb as LightbulbIcon,
+  CheckCircle as CheckCircleIcon,
+} from "@mui/icons-material";
+import { styled } from "@mui/material/styles";
 
-const { Text, Title } = Typography;
+// Styled components for enhanced visual appeal
+const StyledCard = styled(Card)(({ theme }) => ({
+  background:
+    theme.palette.mode === "light"
+      ? "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)"
+      : "linear-gradient(135deg, #064e3b 0%, #065f46 100%)",
+  borderRadius: 16,
+  boxShadow:
+    theme.palette.mode === "light"
+      ? "0 4px 20px rgba(34, 197, 94, 0.1)"
+      : "0 4px 20px rgba(34, 197, 94, 0.2)",
+  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+  position: "relative",
+  overflow: "hidden",
+  border:
+    theme.palette.mode === "light"
+      ? "1px solid rgba(34, 197, 94, 0.2)"
+      : "1px solid rgba(34, 197, 94, 0.3)",
+  "&:hover": {
+    transform: "translateY(-2px)",
+    boxShadow:
+      theme.palette.mode === "light"
+        ? "0 8px 25px rgba(34, 197, 94, 0.15)"
+        : "0 8px 25px rgba(34, 197, 94, 0.25)",
+  },
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background:
+      theme.palette.mode === "light"
+        ? "linear-gradient(45deg, rgba(34, 197, 94, 0.03) 0%, rgba(34, 197, 94, 0.01) 100%)"
+        : "linear-gradient(45deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
+    pointerEvents: "none",
+  },
+}));
+
+const IconContainer = styled(Box)(({ theme }) => ({
+  background: "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
+  borderRadius: 8,
+  padding: theme.spacing(0.75),
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: 36,
+  height: 36,
+  boxShadow: "0 2px 8px rgba(34, 197, 94, 0.2)",
+  position: "relative",
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    top: -1,
+    left: -1,
+    right: -1,
+    bottom: -1,
+    background: "linear-gradient(135deg, #22c55e, #16a34a)",
+    borderRadius: 9,
+    zIndex: -1,
+    opacity: 0.2,
+  },
+}));
+
+const ProgressContainer = styled(Box)(({ theme }) => ({
+  "& .MuiLinearProgress-root": {
+    height: 6,
+    borderRadius: 3,
+    backgroundColor:
+      theme.palette.mode === "light"
+        ? "rgba(34, 197, 94, 0.2)"
+        : "rgba(34, 197, 94, 0.3)",
+  },
+  "& .MuiLinearProgress-bar": {
+    borderRadius: 3,
+    background: "linear-gradient(90deg, #22c55e 0%, #16a34a 100%)",
+  },
+}));
+
+const ActionButton = styled(Button)(({ theme }) => ({
+  background:
+    theme.palette.mode === "light"
+      ? "rgba(34, 197, 94, 0.1)"
+      : "rgba(34, 197, 94, 0.2)",
+  border:
+    theme.palette.mode === "light"
+      ? "1px solid rgba(34, 197, 94, 0.3)"
+      : "1px solid rgba(34, 197, 94, 0.4)",
+  color: theme.palette.mode === "light" ? "#16a34a" : "#4ade80",
+  borderRadius: 6,
+  padding: "4px 10px",
+  textTransform: "none",
+  fontWeight: 600,
+  fontSize: "0.75rem",
+  transition: "all 0.3s ease",
+  "&:hover": {
+    background:
+      theme.palette.mode === "light"
+        ? "rgba(34, 197, 94, 0.15)"
+        : "rgba(34, 197, 94, 0.25)",
+    transform: "translateY(-1px)",
+    boxShadow: "0 2px 8px rgba(34, 197, 94, 0.2)",
+  },
+}));
 
 export const OrganicGrowthReminder: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  if (!isVisible) return null;
+
   return (
-    <Card
-      size="small"
-      style={{
-        background: "linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)",
-        border: "1px solid #bae6fd",
-        borderRadius: 12,
-        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-        transition: "all 0.3s ease",
-      }}
-      className="hover:shadow-lg"
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            gap: 16,
-            flex: 1,
-          }}
-        >
-          {/* Icon Container */}
-          <div
-            style={{
-              padding: 12,
-              borderRadius: 12,
-              background: "rgba(34, 197, 94, 0.15)",
+    <Grow in={isVisible} timeout={800}>
+      <StyledCard>
+        <CardContent sx={{ p: 2, position: "relative", zIndex: 1 }}>
+          <Box
+            sx={{
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 48,
-              height: 48,
-              border: "1px solid rgba(34, 197, 94, 0.2)",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
             }}
           >
-            <RiseOutlined style={{ fontSize: 20, color: "#22c55e" }} />
-          </div>
-
-          {/* Content */}
-          <div style={{ flex: 1 }}>
-            {/* Header with title and heart icon */}
-            <div
-              style={{
+            <Box
+              sx={{
                 display: "flex",
-                alignItems: "center",
-                gap: 8,
-                marginBottom: 8,
+                alignItems: "flex-start",
+                gap: 1.5,
+                flex: 1,
               }}
             >
-              <Title
-                level={4}
-                style={{
-                  margin: 0,
-                  fontSize: 16,
-                  fontWeight: 600,
-                  color: "#1f2937",
-                }}
-              >
-                Don't Forget Organic Growth!
-              </Title>
-              <HeartOutlined style={{ fontSize: 14, color: "#22c55e" }} />
-            </div>
+              {/* Animated Icon Container */}
+              <Fade in timeout={1000}>
+                <IconContainer>
+                  <TrendingUpIcon sx={{ fontSize: 16, color: "#ffffff" }} />
+                </IconContainer>
+              </Fade>
 
-            {/* Description */}
-            <Text
-              type="secondary"
-              style={{
-                fontSize: 13,
-                display: "block",
-                marginBottom: 16,
-                lineHeight: 1.5,
-              }}
-            >
-              While paid ads are great, organic posts can boost your reach for
-              free. Regular posting builds authentic engagement and complements
-              your ad strategy.
-            </Text>
-
-            {/* Action button and tip */}
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              <Button
-                type="default"
-                size="small"
-                icon={<UserOutlined />}
-                style={{
-                  height: 32,
-                  fontSize: 13,
-                  borderColor: "rgba(34, 197, 94, 0.4)",
-                  color: "#22c55e",
-                  borderRadius: 8,
-                  fontWeight: 500,
-                }}
-              >
-                Plan Organic Posts
-              </Button>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <AimOutlined style={{ fontSize: 12, color: "#6b7280" }} />
-                <Text type="secondary" style={{ fontSize: 12 }}>
-                  Tip: Post 3-5 times per week for best results
-                </Text>
-              </div>
-            </div>
-
-            {/* Progress indicator */}
-            <div style={{ marginTop: 16 }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: 4,
-                }}
-              >
-                <Text style={{ fontSize: 12, color: "#6b7280" }}>
-                  Weekly Goal Progress
-                </Text>
-                <Text
-                  style={{ fontSize: 12, fontWeight: 500, color: "#22c55e" }}
+              {/* Content */}
+              <Box sx={{ flex: 1, ml: 1.5 }}>
+                {/* Header with title and heart icon */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 0.5,
+                    mb: 0.5,
+                  }}
                 >
-                  3/5 posts
-                </Text>
-              </div>
-              <Progress
-                percent={60}
-                size="small"
-                strokeColor="#22c55e"
-                showInfo={false}
-                style={{ marginBottom: 0 }}
-              />
-            </div>
-          </div>
-        </div>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: "text.primary",
+                      fontWeight: 600,
+                      fontSize: "0.875rem",
+                    }}
+                  >
+                    Don't Forget Organic Growth!
+                  </Typography>
+                  <FavoriteIcon sx={{ fontSize: 12, color: "#ef4444" }} />
+                </Box>
 
-        {/* Close button */}
-        <Button
-          type="text"
-          size="small"
-          icon={<CloseOutlined />}
-          style={{
-            width: 28,
-            height: 28,
-            color: "#8c8c8c",
-            padding: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: 6,
-          }}
-        />
-      </div>
-    </Card>
+                {/* Description */}
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "text.secondary",
+                    mb: 1.5,
+                    lineHeight: 1.5,
+                    fontSize: "0.75rem",
+                  }}
+                >
+                  While paid ads are great, organic posts can boost your reach
+                  for free. Regular posting builds authentic engagement and
+                  complements your ad strategy.
+                </Typography>
+
+                {/* Action button and tip */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1.5,
+                    mb: 1.5,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <ActionButton
+                    startIcon={<PersonIcon sx={{ fontSize: 14 }} />}
+                    size="small"
+                  >
+                    Plan Organic Posts
+                  </ActionButton>
+
+                  <Chip
+                    icon={<LightbulbIcon sx={{ fontSize: 10 }} />}
+                    label="Tip: Post 3-5 times per week for best results"
+                    size="small"
+                    sx={{
+                      background: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "rgba(34, 197, 94, 0.1)"
+                          : "rgba(34, 197, 94, 0.2)",
+                      color: (theme) =>
+                        theme.palette.mode === "light" ? "#16a34a" : "#4ade80",
+                      border: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "1px solid rgba(34, 197, 94, 0.2)"
+                          : "1px solid rgba(34, 197, 94, 0.3)",
+                      "& .MuiChip-label": {
+                        fontSize: "0.7rem",
+                      },
+                    }}
+                  />
+                </Box>
+
+                {/* Progress indicator */}
+                <Box sx={{ mt: 1.5 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      mb: 0.5,
+                    }}
+                  >
+                    <Typography
+                      variant="caption"
+                      sx={{ color: "text.secondary", fontSize: "0.7rem" }}
+                    >
+                      Weekly Goal Progress
+                    </Typography>
+                    <Box
+                      sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                    >
+                      <CheckCircleIcon
+                        sx={{
+                          fontSize: 10,
+                          color: (theme) =>
+                            theme.palette.mode === "light"
+                              ? "#16a34a"
+                              : "#4ade80",
+                        }}
+                      />
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: (theme) =>
+                            theme.palette.mode === "light"
+                              ? "#16a34a"
+                              : "#4ade80",
+                          fontWeight: 600,
+                          fontSize: "0.7rem",
+                        }}
+                      >
+                        3/5 posts
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <ProgressContainer>
+                    <LinearProgress
+                      variant="determinate"
+                      value={60}
+                      sx={{
+                        "& .MuiLinearProgress-bar": {
+                          transition: "transform 1s ease-in-out",
+                        },
+                      }}
+                    />
+                  </ProgressContainer>
+                </Box>
+              </Box>
+            </Box>
+
+            {/* Close button */}
+            <IconButton
+              onClick={() => setIsVisible(false)}
+              sx={{
+                color: "text.secondary",
+                "&:hover": {
+                  color: "text.primary",
+                  background: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "rgba(34, 197, 94, 0.1)"
+                      : "rgba(34, 197, 94, 0.2)",
+                },
+                transition: "all 0.2s ease",
+              }}
+              size="small"
+            >
+              <CloseIcon sx={{ fontSize: 16 }} />
+            </IconButton>
+          </Box>
+        </CardContent>
+      </StyledCard>
+    </Grow>
   );
 };

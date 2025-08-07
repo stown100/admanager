@@ -1,5 +1,5 @@
 import React from "react";
-import { Spin } from "antd";
+import { CircularProgress, Box } from "@mui/material";
 import { useAuth } from "../hooks/useAuth";
 import { AuthPage } from "../../pages/auth";
 
@@ -12,16 +12,16 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   if (isLoading) {
     return (
-      <div
-        style={{
+      <Box
+        sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
         }}
       >
-        <Spin size="large" />
-      </div>
+        <CircularProgress size={60} />
+      </Box>
     );
   }
 

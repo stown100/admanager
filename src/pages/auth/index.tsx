@@ -1,17 +1,53 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Typography, Space, Alert, Spin } from "antd";
-import { GoogleOutlined } from "@ant-design/icons";
+import {
+  Card,
+  CardContent,
+  Button,
+  Typography,
+  Box,
+  Alert,
+  CircularProgress,
+  Link,
+} from "@mui/material";
+import { Google as GoogleIcon } from "@mui/icons-material";
 import { useAuth } from "../../shared/hooks/useAuth";
+import { useTheme } from "../../shared/context/ThemeContext";
+import { styled } from "@mui/material/styles";
 
-const { Title, Text } = Typography;
+const StyledCard = styled(Card)(({ theme }) => ({
+  width: "100%",
+  maxWidth: 400,
+  background: theme.palette.mode === 'light'
+    ? "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
+    : "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
+  border: `1px solid ${theme.palette.divider}`,
+  boxShadow: theme.palette.mode === 'light'
+    ? "0 8px 32px rgba(0,0,0,0.1)"
+    : "0 8px 32px rgba(0,0,0,0.3)",
+  borderRadius: 12,
+}));
+
+const AuthButton = styled(Button)(({ theme }) => ({
+  height: 48,
+  backgroundColor: "#4285f4",
+  "&:hover": {
+    backgroundColor: "#3367d6",
+  },
+  "&:disabled": {
+    backgroundColor: theme.palette.mode === 'light' 
+      ? "rgba(66, 133, 244, 0.6)" 
+      : "rgba(66, 133, 244, 0.4)",
+  },
+}));
 
 export const AuthPage: React.FC = () => {
   const {
     loginWithGoogle,
     isAuthenticated,
     isLoading: globalLoading,
+    isLoggingIn,
   } = useAuth();
-  const [isFormLoading, setIsFormLoading] = useState(false);
+  const { mode } = useTheme();
   const [error, setError] = useState<string | null>(null);
 
   // Auto redirect when authenticated
@@ -23,7 +59,6 @@ export const AuthPage: React.FC = () => {
 
   const handleGoogleLogin = async () => {
     setError(null);
-    setIsFormLoading(true);
 
     try {
       await loginWithGoogle();
@@ -35,105 +70,98 @@ export const AuthPage: React.FC = () => {
           ? error.message
           : "An error occurred during login. Please try again."
       );
-    } finally {
-      setIsFormLoading(false);
     }
   };
 
   // Show loading spinner while checking authentication status
   if (globalLoading) {
     return (
-      <div
-        style={{
+      <Box
+        sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          background: mode === 'light'
+            ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+            : "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
         }}
       >
-        <Spin size="large" />
-      </div>
+        <CircularProgress size={60} />
+      </Box>
     );
   }
 
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        background: mode === 'light'
+          ? "rgb(245, 245, 245)"
+          : "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
         padding: "20px",
       }}
     >
-      <Card
-        style={{
-          width: "100%",
-          maxWidth: 400,
-          boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-          borderRadius: 12,
-        }}
-      >
-        <Space direction="vertical" size="large" style={{ width: "100%" }}>
-          <div style={{ textAlign: "center" }}>
-            <Title level={2} style={{ marginBottom: 8 }}>
+      <StyledCard>
+        <CardContent sx={{ p: 4 }}>
+          <Box sx={{ textAlign: "center", mb: 4 }}>
+            <Typography variant="h4" sx={{ mb: 1, color: "text.primary" }}>
               Welcome
-            </Title>
-            <Text type="secondary">Sign in to access the dashboard</Text>
-          </div>
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Sign in to access the dashboard
+            </Typography>
+          </Box>
 
-          <Button
-            type="primary"
+          <AuthButton
+            variant="contained"
             size="large"
-            icon={<GoogleOutlined />}
+            startIcon={
+              isLoggingIn ? (
+                <CircularProgress size={20} color="inherit" />
+              ) : (
+                <GoogleIcon />
+              )
+            }
             onClick={handleGoogleLogin}
-            loading={isFormLoading}
-            disabled={isFormLoading}
-            style={{
-              width: "100%",
-              height: 48,
-              background: "#4285f4",
-              borderColor: "#4285f4",
-            }}
+            disabled={isLoggingIn}
+            fullWidth
           >
-            {isFormLoading ? "Signing in..." : "Sign in with Google"}
-          </Button>
+            {isLoggingIn ? "Signing in..." : "Sign in with Google"}
+          </AuthButton>
 
           {error && (
             <Alert
-              message="Authentication Error"
-              description={error}
-              type="error"
-              showIcon
-              closable
+              severity="error"
+              sx={{ mt: 2, mb: 2 }}
               onClose={() => setError(null)}
-              style={{ marginBottom: 16 }}
-            />
+            >
+              {error}
+            </Alert>
           )}
 
-          <Alert
-            message="Secure Authentication"
-            description="We use Google OAuth for secure authentication. Your data is protected."
-            type="info"
-            showIcon
-          />
+          <Alert severity="info" sx={{ mt: 2, mb: 2 }}>
+            We use Google OAuth for secure authentication. Your data is
+            protected.
+          </Alert>
 
-          <div style={{ marginTop: 16 }}>
-            <Text type="secondary" style={{ fontSize: 12 }}>
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="caption" color="text.secondary">
               By signing in, you agree to our{" "}
-              <a href="#" style={{ color: "#1890ff" }}>
+              <Link href="#" color="primary">
                 Terms of Service
-              </a>{" "}
+              </Link>{" "}
               and{" "}
-              <a href="#" style={{ color: "#1890ff" }}>
+              <Link href="#" color="primary">
                 Privacy Policy
-              </a>
-            </Text>
-          </div>
-        </Space>
-      </Card>
-    </div>
+              </Link>
+            </Typography>
+          </Box>
+        </CardContent>
+      </StyledCard>
+    </Box>
   );
 };

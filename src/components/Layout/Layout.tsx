@@ -60,8 +60,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const drawer = (
     <div>
       <Toolbar>
-        <Typography variant="h6" noWrap component="div">
-          AdManager
+        <Typography variant="h6" sx={{ fontWeight: 600, color: "#2463eb" }}>
+          ROIable
         </Typography>
       </Toolbar>
       <Divider />
