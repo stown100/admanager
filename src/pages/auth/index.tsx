@@ -144,8 +144,12 @@ export const AuthPage: React.FC = () => {
           )}
 
           <Alert severity="info" sx={{ mt: 2, mb: 2 }}>
-            We use Google OAuth for secure authentication. Your data is
-            protected.
+            <Typography variant="body2" sx={{ mb: 1 }}>
+              <strong>New users:</strong> After your first sign-in, you'll receive a verification email to confirm your account.
+            </Typography>
+            <Typography variant="body2">
+              We use Firebase Authentication for secure login. Your data is protected and we never store your password.
+            </Typography>
           </Alert>
 
           <Box sx={{ mt: 2 }}>
