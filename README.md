@@ -10,12 +10,14 @@ A modern React-based dashboard for managing advertising campaigns across multipl
 - **Campaign Management**: Create, edit, and optimize campaigns from one dashboard
 - **Performance Tracking**: Track ROI, CTR, CPC, and other key metrics
 - **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Secure Authentication**: Firebase Authentication with Google OAuth and email verification
+- **Email Verification**: Automatic email verification for new users
 
 ## Tech Stack
 
 - **Frontend**: React 19, TypeScript, Material-UI
 - **Build Tool**: Vite
-- **Authentication**: Google OAuth 2.0, Facebook Login
+- **Authentication**: Firebase Authentication with Google OAuth
 - **Charts**: Recharts
 - **State Management**: React Context API
 
@@ -25,6 +27,7 @@ A modern React-based dashboard for managing advertising campaigns across multipl
 
 - Node.js (v18 or higher)
 - npm or yarn
+- Firebase project
 
 ### Installation
 
@@ -39,23 +42,49 @@ cd roiable
 npm install
 ```
 
-3. Set up environment variables:
+3. Set up Firebase:
+   - Follow the instructions in [FIREBASE_SETUP.md](./FIREBASE_SETUP.md)
+   - Create a Firebase project and configure authentication
+
+4. Set up environment variables:
 ```bash
 cp .env.example .env.local
 ```
 
-Edit `.env.local` and add your API keys:
-```
-VITE_GOOGLE_CLIENT_ID=your_google_client_id
-VITE_FACEBOOK_APP_ID=your_facebook_app_id
+Edit `.env.local` and add your configuration:
+```env
+# Google OAuth (Firebase)
+VITE_GOOGLE_CLIENT_ID=your_google_client_id_here
+
+# Firebase Configuration
+VITE_FIREBASE_API_KEY=your_firebase_api_key_here
+VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
 ```
 
-4. Start the development server:
+5. Start the development server:
 ```bash
 npm run dev
 ```
 
-5. Open your browser and navigate to `http://localhost:5173`
+6. Open your browser and navigate to `http://localhost:5173`
+
+## Authentication Features
+
+### Firebase Authentication
+- **Google OAuth**: Secure sign-in with Google accounts
+- **Email Verification**: Automatic email verification for new users
+- **User Management**: Firebase handles user sessions and data
+- **Security**: Built-in security features from Firebase
+
+### New User Experience
+- Welcome message for first-time users
+- Automatic email verification request
+- Ability to resend verification emails
+- Status tracking for email verification
 
 ## Project Structure
 
@@ -63,23 +92,23 @@ npm run dev
 src/
 ├── app/                    # App-level components
 ├── components/             # Reusable UI components
+│   ├── EmailVerification.tsx  # Email verification component
+│   └── WelcomeMessage.tsx     # Welcome message for new users
 ├── pages/                  # Page components
 ├── shared/                 # Shared utilities and hooks
-│   ├── api/               # API services
 │   ├── config/            # Configuration files
+│   │   └── firebase.ts    # Firebase configuration
 │   ├── hooks/             # Custom React hooks
+│   │   └── useAuth.tsx    # Authentication hook
 │   ├── types/             # TypeScript type definitions
+│   │   └── firebase.d.ts  # Firebase types
 │   └── ui/                # UI components
 └── widgets/               # Dashboard widgets
 ```
 
-## Authentication Setup
+## Firebase Setup
 
-### Google OAuth 2.0
-See [GOOGLE_OAUTH_SETUP.md](./GOOGLE_OAUTH_SETUP.md) for detailed instructions.
-
-### Facebook Login
-See [FACEBOOK_APP_SETUP.md](./FACEBOOK_APP_SETUP.md) for detailed instructions.
+See [FIREBASE_SETUP.md](./FIREBASE_SETUP.md) for detailed instructions on setting up Firebase Authentication.
 
 ## Available Scripts
 
