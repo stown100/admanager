@@ -66,12 +66,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <StyledAppBar position="fixed">
         <StyledToolbar>
-          <Typography
-            variant="h5"
-            component="div"
-            sx={{ color: "#1890ff", fontWeight: 600 }}
-          >
-            AdManager
+          <Typography variant="h6" sx={{ fontWeight: 600, color: "#2463eb" }}>
+            ROIable
           </Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>

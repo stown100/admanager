@@ -1,171 +1,109 @@
-# AdManager - Advertising Campaign Management System
+# ROIable - Advertising Campaign Management System
 
-Modern web application for managing advertising campaigns with Google OAuth integration.
+A modern React-based dashboard for managing advertising campaigns across multiple platforms (Meta Ads, Google Ads, TikTok Ads) with AI-powered insights and recommendations.
 
-## 🚀 Features
+## Features
 
-- **🔐 Secure Authentication** via Google OAuth 2.0
-- **📊 Dashboard** with analytics and metrics
-- **🎯 Campaign Management** with detailed analytics
-- **📈 Performance Monitoring** in real-time
-- **🎨 Modern UI** based on Ant Design
-- **📱 Responsive Design** for all devices
+- **Multi-Platform Integration**: Connect and manage campaigns from Meta Ads, Google Ads, and TikTok Ads
+- **AI-Powered Insights**: Get intelligent recommendations for campaign optimization
+- **Real-time Analytics**: Monitor performance metrics across all platforms
+- **Campaign Management**: Create, edit, and optimize campaigns from one dashboard
+- **Performance Tracking**: Track ROI, CTR, CPC, and other key metrics
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
 
-## 🛠 Technologies
+## Tech Stack
 
-- **React 19** - modern library for user interfaces
-- **TypeScript** - typed JavaScript
-- **Vite** - fast project bundler
-- **Ant Design** - UI component library
-- **Google OAuth 2.0** - secure authentication
-- **React Router** - application routing
+- **Frontend**: React 19, TypeScript, Material-UI
+- **Build Tool**: Vite
+- **Authentication**: Google OAuth 2.0, Facebook Login
+- **Charts**: Recharts
+- **State Management**: React Context API
 
-## 📦 Installation and Setup
+## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js (v18 or higher)
 - npm or yarn
-- Google Cloud Console project with configured OAuth 2.0
 
 ### Installation
 
-1. **Clone the repository:**
+1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd admanager
+git clone https://github.com/yourusername/roiable.git
+cd roiable
 ```
 
-2. **Install dependencies:**
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-3. **Configure environment variables:**
-Create a `.env` file in the project root:
-```env
-VITE_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
-VITE_REDIRECT_URI=http://localhost:5173
+3. Set up environment variables:
+```bash
+cp .env.example .env.local
 ```
 
-4. **Configure Google Cloud Console:**
-   - Create a project in [Google Cloud Console](https://console.cloud.google.com/)
-   - Enable Google+ API
-   - Create OAuth 2.0 Client ID of type "Web application"
-   - Add `http://localhost:5173` to Authorized JavaScript origins
-   - Add `http://localhost:5173` to Authorized redirect URIs
+Edit `.env.local` and add your API keys:
+```
+VITE_GOOGLE_CLIENT_ID=your_google_client_id
+VITE_FACEBOOK_APP_ID=your_facebook_app_id
+```
 
-### Running
-
-**Development mode:**
+4. Start the development server:
 ```bash
 npm run dev
 ```
 
-**Production build:**
-```bash
-npm run build
-```
+5. Open your browser and navigate to `http://localhost:5173`
 
-**Preview build:**
-```bash
-npm run preview
-```
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
-├── app/                    # Main application components
-│   ├── App.tsx           # Root component
-│   └── Layout.tsx        # Application layout
-├── components/            # Reusable components
-├── pages/                # Application pages
-│   ├── auth/            # Authentication page
-│   └── dashboard/       # Main dashboard
-├── shared/              # Shared resources
-│   ├── components/      # Shared components
-│   ├── hooks/          # Custom hooks
-│   ├── config/         # Configuration
-│   └── types/          # TypeScript types
-└── widgets/             # Dashboard widgets
+├── app/                    # App-level components
+├── components/             # Reusable UI components
+├── pages/                  # Page components
+├── shared/                 # Shared utilities and hooks
+│   ├── api/               # API services
+│   ├── config/            # Configuration files
+│   ├── hooks/             # Custom React hooks
+│   ├── types/             # TypeScript type definitions
+│   └── ui/                # UI components
+└── widgets/               # Dashboard widgets
 ```
 
-## 🔐 Authentication
+## Authentication Setup
 
-The application uses Google OAuth 2.0 for secure authentication:
+### Google OAuth 2.0
+See [GOOGLE_OAUTH_SETUP.md](./GOOGLE_OAUTH_SETUP.md) for detailed instructions.
 
-- **Security**: All data is transmitted via HTTPS
-- **Simplicity**: One-click sign-in with Google account
-- **Reliability**: Uses official Google Identity Services API
+### Facebook Login
+See [FACEBOOK_APP_SETUP.md](./FACEBOOK_APP_SETUP.md) for detailed instructions.
 
-## 🎨 UI/UX
+## Available Scripts
 
-- **Modern design** with gradients and shadows
-- **Responsive layout** for all devices
-- **Intuitive interface** with clear navigation
-- **Fast loading** thanks to Vite optimization
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
 
-## 🔧 Development
-
-### Available Scripts
-
-- `npm run dev` - run in development mode
-- `npm run build` - build for production
-- `npm run preview` - preview build
-- `npm run lint` - code checking
-
-### Component Structure
-
-- **AuthProvider** - authentication state management
-- **GoogleOAuthProvider** - Google OAuth integration
-- **ProtectedRoute** - protected routes
-- **Layout** - main application layout
-
-## 🚀 Deployment
-
-### Production Preparation
-
-1. **Update environment variables:**
-```env
-VITE_GOOGLE_CLIENT_ID=your-production-client-id
-VITE_REDIRECT_URI=https://your-domain.com
-```
-
-2. **Configure Google Cloud Console:**
-   - Add your domain to Authorized JavaScript origins
-   - Add your domain to Authorized redirect URIs
-
-3. **Build the project:**
-```bash
-npm run build
-```
-
-### Deployment Platforms
-
-- **Vercel** - recommended platform
-- **Netlify** - alternative option
-- **GitHub Pages** - for static sites
-
-## 📄 License
-
-MIT License - see LICENSE file for details.
-
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make changes
-4. Create a Pull Request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## 📞 Support
+## License
 
-If you have questions or issues:
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-1. Check [Google OAuth documentation](https://developers.google.com/identity/protocols/oauth2)
-2. Make sure Google Cloud Console settings are correct
-3. Check browser console for errors
+## Support
+
+If you have any questions or need help, please open an issue on GitHub.
 
 ---
 
-**AdManager** - modern solution for advertising campaign management 🚀 
+**ROIable** - modern solution for advertising campaign management 🚀 

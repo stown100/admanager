@@ -5,6 +5,7 @@ import { PlatformComparison } from "../../widgets/platform-comparison";
 import { PerformanceChart } from "../../widgets/performance-chart";
 import { OrganicGrowthReminder } from "../../components/OrganicGrowthReminder";
 import { RecommendationsBlock } from "../../components/RecommendationsBlock";
+import { AdSuggestions } from "../../components/AdSuggestions";
 
 export const DashboardPage: React.FC = () => {
   return (
@@ -27,15 +28,21 @@ export const DashboardPage: React.FC = () => {
         </Box>
       </Grow>
 
-      <Grow in timeout={1400}>
+      <Grow in timeout={2000}>
         <Box sx={{ mb: 2 }}>
-          <PlatformComparison />
+          <PerformanceChart />
         </Box>
       </Grow>
 
-      <Grow in timeout={1600}>
+      <Grow in timeout={1400}>
         <Box sx={{ mb: 2 }}>
-          <PerformanceChart />
+          <AdSuggestions />
+        </Box>
+      </Grow>
+
+      <Grow in timeout={1800}>
+        <Box sx={{ mb: 2 }}>
+          <PlatformComparison />
         </Box>
       </Grow>
     </Box>
