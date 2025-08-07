@@ -19,14 +19,23 @@ import { styled } from "@mui/material/styles";
 
 // Styled components for enhanced visual appeal
 const StyledCard = styled(Card)(({ theme }) => ({
-  background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
+  background:
+    theme.palette.mode === "light"
+      ? "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
+      : "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
   borderRadius: 12,
-  border: "1px solid #e2e8f0",
-  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+  border: `1px solid ${theme.palette.divider}`,
+  boxShadow:
+    theme.palette.mode === "light"
+      ? "0 1px 3px rgba(0, 0, 0, 0.1)"
+      : "0 1px 3px rgba(0, 0, 0, 0.3)",
   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
   "&:hover": {
     transform: "translateY(-2px)",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+    boxShadow:
+      theme.palette.mode === "light"
+        ? "0 4px 12px rgba(0, 0, 0, 0.15)"
+        : "0 4px 12px rgba(0, 0, 0, 0.4)",
   },
 }));
 
@@ -36,17 +45,26 @@ const SuggestionCard = styled(Box)(({ theme }) => ({
   gap: theme.spacing(2),
   padding: theme.spacing(2),
   borderRadius: 8,
-  backgroundColor: "rgba(241, 245, 249, 0.5)",
-  border: "1px solid #e2e8f0",
+  backgroundColor:
+    theme.palette.mode === "light"
+      ? "rgba(241, 245, 249, 0.5)"
+      : "rgba(30, 41, 59, 0.5)",
+  border: `1px solid ${theme.palette.divider}`,
   transition: "all 0.3s ease",
   "&:hover": {
-    backgroundColor: "rgba(241, 245, 249, 0.8)",
+    backgroundColor:
+      theme.palette.mode === "light"
+        ? "rgba(241, 245, 249, 0.8)"
+        : "rgba(30, 41, 59, 0.8)",
     transform: "translateX(4px)",
-    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+    boxShadow:
+      theme.palette.mode === "light"
+        ? "0 2px 8px rgba(0, 0, 0, 0.1)"
+        : "0 2px 8px rgba(0, 0, 0, 0.3)",
   },
 }));
 
-const IconAvatar = styled(Avatar)(({ theme }) => ({
+const IconAvatar = styled(Avatar)(() => ({
   width: 40,
   height: 40,
   background: "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)",
@@ -72,7 +90,7 @@ const IconAvatar = styled(Avatar)(({ theme }) => ({
 const ActionButton = styled(Button)(({ theme }) => ({
   background: "rgba(59, 130, 246, 0.1)",
   border: "1px solid rgba(59, 130, 246, 0.3)",
-  color: "#1d4ed8",
+  color: theme.palette.primary.main,
   borderRadius: 6,
   padding: "4px 10px",
   textTransform: "none",
@@ -168,12 +186,15 @@ export const AdSuggestions: React.FC = () => {
       <CardContent sx={{ p: 3 }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
           <Lightbulb sx={{ color: "#f59e0b", fontSize: 28 }} />
-          <Typography variant="h5" sx={{ fontWeight: 600, color: "#1f2937" }}>
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: 600, color: "text.primary" }}
+          >
             AI-Powered Ad Suggestions
           </Typography>
         </Box>
 
-        <Typography variant="body2" sx={{ mb: 3, color: "#6b7280" }}>
+        <Typography variant="body2" sx={{ mb: 3, color: "text.secondary" }}>
           Optimize your campaigns with data-driven recommendations
         </Typography>
 
@@ -198,7 +219,7 @@ export const AdSuggestions: React.FC = () => {
                 >
                   <Typography
                     variant="subtitle2"
-                    sx={{ fontWeight: 600, color: "#1f2937" }}
+                    sx={{ fontWeight: 600, color: "text.primary" }}
                   >
                     {suggestion.title}
                   </Typography>
@@ -222,7 +243,7 @@ export const AdSuggestions: React.FC = () => {
 
                 <Typography
                   variant="body2"
-                  sx={{ mb: 2, color: "#6b7280", fontSize: "0.8rem" }}
+                  sx={{ mb: 2, color: "text.secondary", fontSize: "0.8rem" }}
                 >
                   {suggestion.description}
                 </Typography>
@@ -236,7 +257,7 @@ export const AdSuggestions: React.FC = () => {
                 >
                   <Typography
                     variant="caption"
-                    sx={{ color: "#3b82f6", fontWeight: 600 }}
+                    sx={{ color: "primary.main", fontWeight: 600 }}
                   >
                     {suggestion.benefit}
                   </Typography>

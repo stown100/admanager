@@ -29,27 +29,42 @@ import { styled } from "@mui/material/styles";
 
 // Styled components for enhanced visual appeal
 const StyledCard = styled(Card)(({ theme }) => ({
-  background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
+  background:
+    theme.palette.mode === "light"
+      ? "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
+      : "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
   borderRadius: 12,
-  border: "1px solid #e2e8f0",
-  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+  border: `1px solid ${theme.palette.divider}`,
+  boxShadow:
+    theme.palette.mode === "light"
+      ? "0 1px 3px rgba(0, 0, 0, 0.1)"
+      : "0 1px 3px rgba(0, 0, 0, 0.3)",
   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
   "&:hover": {
     transform: "translateY(-2px)",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+    boxShadow:
+      theme.palette.mode === "light"
+        ? "0 4px 12px rgba(0, 0, 0, 0.15)"
+        : "0 4px 12px rgba(0, 0, 0, 0.4)",
   },
 }));
 
 const PlatformCard = styled(Card, {
   shouldForwardProp: (prop) => prop !== "$color",
 })<{ $color: string }>(({ theme, $color }) => ({
-  background: `linear-gradient(135deg, ${$color}25 0%, ${$color}15 100%)`,
+  background:
+    theme.palette.mode === "light"
+      ? `linear-gradient(135deg, ${$color}25 0%, ${$color}15 100%)`
+      : `linear-gradient(135deg, ${$color}20 0%, ${$color}10 100%)`,
   border: `1px solid ${$color}40`,
   borderRadius: 8,
   transition: "all 0.3s ease",
   "&:hover": {
     transform: "translateY(-1px)",
-    boxShadow: `0 4px 12px ${$color}30`,
+    boxShadow:
+      theme.palette.mode === "light"
+        ? `0 4px 12px ${$color}30`
+        : `0 4px 12px ${$color}40`,
   },
 }));
 
@@ -64,7 +79,10 @@ const ProgressContainer = styled(Box)(({ theme }) => ({
   "& .MuiLinearProgress-root": {
     height: 6,
     borderRadius: 3,
-    backgroundColor: "rgba(0, 0, 0, 0.1)",
+    backgroundColor:
+      theme.palette.mode === "light"
+        ? "rgba(0, 0, 0, 0.1)"
+        : "rgba(255, 255, 255, 0.1)",
   },
   "& .MuiLinearProgress-bar": {
     borderRadius: 3,
@@ -162,7 +180,7 @@ export const RecommendationsBlock: React.FC = () => {
                   sx={{
                     fontWeight: 600,
                     fontSize: "1.125rem",
-                    color: "#1f2937",
+                    color: "text.primary",
                   }}
                 >
                   Platform Performance Comparison
@@ -170,7 +188,7 @@ export const RecommendationsBlock: React.FC = () => {
               </Box>
               <Typography
                 variant="body2"
-                sx={{ color: "#6b7280", fontSize: "0.875rem" }}
+                sx={{ color: "text.secondary", fontSize: "0.875rem" }}
               >
                 Compare metrics across your advertising platforms
               </Typography>
@@ -223,7 +241,7 @@ export const RecommendationsBlock: React.FC = () => {
                           sx={{
                             fontWeight: 600,
                             fontSize: "0.875rem",
-                            color: "#1f2937",
+                            color: "text.primary",
                           }}
                         >
                           {platform.name}
@@ -265,7 +283,7 @@ export const RecommendationsBlock: React.FC = () => {
                       <MetricRow>
                         <Typography
                           variant="caption"
-                          sx={{ color: "#6b7280", fontSize: "0.75rem" }}
+                          sx={{ color: "text.secondary", fontSize: "0.75rem" }}
                         >
                           ROI
                         </Typography>
@@ -281,7 +299,7 @@ export const RecommendationsBlock: React.FC = () => {
                             sx={{
                               fontWeight: 700,
                               fontSize: "1.125rem",
-                              color: "#1f2937",
+                              color: "text.primary",
                             }}
                           >
                             {platform.roi}
@@ -304,7 +322,7 @@ export const RecommendationsBlock: React.FC = () => {
                         <MetricRow>
                           <Typography
                             variant="caption"
-                            sx={{ color: "#6b7280" }}
+                            sx={{ color: "text.secondary" }}
                           >
                             Revenue
                           </Typography>
@@ -318,7 +336,7 @@ export const RecommendationsBlock: React.FC = () => {
                         <MetricRow>
                           <Typography
                             variant="caption"
-                            sx={{ color: "#6b7280" }}
+                            sx={{ color: "text.secondary" }}
                           >
                             Spend
                           </Typography>
@@ -332,7 +350,7 @@ export const RecommendationsBlock: React.FC = () => {
                         <MetricRow>
                           <Typography
                             variant="caption"
-                            sx={{ color: "#6b7280" }}
+                            sx={{ color: "text.secondary" }}
                           >
                             CTR
                           </Typography>
@@ -346,7 +364,7 @@ export const RecommendationsBlock: React.FC = () => {
                         <MetricRow>
                           <Typography
                             variant="caption"
-                            sx={{ color: "#6b7280" }}
+                            sx={{ color: "text.secondary" }}
                           >
                             CPC
                           </Typography>
@@ -366,7 +384,7 @@ export const RecommendationsBlock: React.FC = () => {
                       <Typography
                         variant="caption"
                         sx={{
-                          color: "#6b7280",
+                          color: "text.secondary",
                           fontSize: "0.7rem",
                           display: "block",
                           mb: 1,
@@ -384,7 +402,7 @@ export const RecommendationsBlock: React.FC = () => {
                               fontSize: "0.65rem",
                               height: 18,
                               background: "rgba(0, 0, 0, 0.05)",
-                              color: "#374151",
+                              color: "text.secondary",
                             }}
                           />
                         ))}
@@ -501,7 +519,7 @@ export const RecommendationsBlock: React.FC = () => {
           {/* Platform Insights */}
           <Box
             sx={{
-              background: "rgba(241, 245, 249, 0.5)",
+              border: (theme) => `1px solid ${theme.palette.divider}`,
               borderRadius: 2,
               p: 2,
             }}
@@ -514,10 +532,14 @@ export const RecommendationsBlock: React.FC = () => {
                 mb: 1.5,
               }}
             >
-              <LightbulbIcon sx={{ fontSize: 16, color: "#f59e0b" }} />
+              <LightbulbIcon sx={{ fontSize: 16, color: "warning.main" }} />
               <Typography
                 variant="subtitle2"
-                sx={{ fontWeight: 600, fontSize: "0.875rem" }}
+                sx={{
+                  fontWeight: 600,
+                  fontSize: "0.875rem",
+                  color: "text.primary",
+                }}
               >
                 Platform Insights
               </Typography>
@@ -541,17 +563,17 @@ export const RecommendationsBlock: React.FC = () => {
                     mb: 0.5,
                   }}
                 >
-                  <TrophyIcon sx={{ fontSize: 12, color: "#10b981" }} />
+                  <TrophyIcon sx={{ fontSize: 12, color: "success.main" }} />
                   <Typography
                     variant="caption"
-                    sx={{ fontWeight: 600, color: "#10b981" }}
+                    sx={{ fontWeight: 600, color: "success.main" }}
                   >
                     Highest ROI:
                   </Typography>
                 </Box>
                 <Typography
                   variant="caption"
-                  sx={{ color: "#6b7280", fontSize: "0.75rem" }}
+                  sx={{ color: "text.secondary", fontSize: "0.75rem" }}
                 >
                   Meta Ads leading with 280% ROI
                 </Typography>
@@ -565,17 +587,17 @@ export const RecommendationsBlock: React.FC = () => {
                     mb: 0.5,
                   }}
                 >
-                  <StarIcon sx={{ fontSize: 12, color: "#3b82f6" }} />
+                  <StarIcon sx={{ fontSize: 12, color: "primary.main" }} />
                   <Typography
                     variant="caption"
-                    sx={{ fontWeight: 600, color: "#3b82f6" }}
+                    sx={{ fontWeight: 600, color: "primary.main" }}
                   >
                     Best CTR:
                   </Typography>
                 </Box>
                 <Typography
                   variant="caption"
-                  sx={{ color: "#6b7280", fontSize: "0.75rem" }}
+                  sx={{ color: "text.secondary", fontSize: "0.75rem" }}
                 >
                   TikTok Ads with 4.15% engagement
                 </Typography>
@@ -589,17 +611,17 @@ export const RecommendationsBlock: React.FC = () => {
                     mb: 0.5,
                   }}
                 >
-                  <DollarIcon sx={{ fontSize: 12, color: "#f59e0b" }} />
+                  <DollarIcon sx={{ fontSize: 12, color: "warning.main" }} />
                   <Typography
                     variant="caption"
-                    sx={{ fontWeight: 600, color: "#f59e0b" }}
+                    sx={{ fontWeight: 600, color: "warning.main" }}
                   >
                     Lowest CPC:
                   </Typography>
                 </Box>
                 <Typography
                   variant="caption"
-                  sx={{ color: "#6b7280", fontSize: "0.75rem" }}
+                  sx={{ color: "text.secondary", fontSize: "0.75rem" }}
                 >
                   TikTok Ads at $0.89 per click
                 </Typography>

@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, CardContent, Typography, Box, Grow } from "@mui/material";
 import {
-  Visibility as VisibilityIcon,
   Mouse as MouseIcon,
   MyLocation as TargetIcon,
   AttachMoney as AttachMoneyIcon,
@@ -17,29 +16,38 @@ import { metricsData, MetricData } from "@/shared/data/mockData";
 
 // Styled components for enhanced visual appeal
 const StyledCard = styled(Card)(({ theme }) => ({
-  background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
+  background:
+    theme.palette.mode === "light"
+      ? "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
+      : "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
   borderRadius: 12,
-  border: "1px solid #e2e8f0",
-  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+  border: `1px solid ${theme.palette.divider}`,
+  boxShadow:
+    theme.palette.mode === "light"
+      ? "0 1px 3px rgba(0, 0, 0, 0.1)"
+      : "0 1px 3px rgba(0, 0, 0, 0.3)",
   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
   height: "100%",
   "&:hover": {
     transform: "translateY(-2px)",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+    boxShadow:
+      theme.palette.mode === "light"
+        ? "0 4px 12px rgba(0, 0, 0, 0.15)"
+        : "0 4px 12px rgba(0, 0, 0, 0.4)",
   },
 }));
 
 const MetricValue = styled(Typography)(({ theme }) => ({
   fontSize: "1.75rem",
   fontWeight: 700,
-  color: "#1f2937",
+  color: theme.palette.text.primary,
   marginBottom: theme.spacing(0.5),
 }));
 
 const MetricTitle = styled(Typography)(({ theme }) => ({
   fontSize: "0.875rem",
   fontWeight: 500,
-  color: "#6b7280",
+  color: theme.palette.text.secondary,
   marginBottom: theme.spacing(0.5),
 }));
 
@@ -49,39 +57,45 @@ export const MetricsOverview: React.FC = () => {
     icon: (() => {
       switch (item.title) {
         case "Total Impressions":
-          return <EyeIcon sx={{ fontSize: 18, color: "#6b7280" }} />;
+          return <EyeIcon sx={{ fontSize: 18, color: "text.secondary" }} />;
         case "Total Clicks":
-          return <MouseIcon sx={{ fontSize: 18, color: "#6b7280" }} />;
+          return <MouseIcon sx={{ fontSize: 18, color: "text.secondary" }} />;
         case "Conversions":
-          return <TargetIcon sx={{ fontSize: 18, color: "#6b7280" }} />;
+          return <TargetIcon sx={{ fontSize: 18, color: "text.secondary" }} />;
         case "CTR":
-          return <TrendingUpIcon sx={{ fontSize: 18, color: "#6b7280" }} />;
+          return (
+            <TrendingUpIcon sx={{ fontSize: 18, color: "text.secondary" }} />
+          );
         case "Total Spend":
-          return <AttachMoneyIcon sx={{ fontSize: 18, color: "#6b7280" }} />;
+          return (
+            <AttachMoneyIcon sx={{ fontSize: 18, color: "text.secondary" }} />
+          );
         case "Active Users":
-          return <PersonIcon sx={{ fontSize: 18, color: "#6b7280" }} />;
+          return <PersonIcon sx={{ fontSize: 18, color: "text.secondary" }} />;
         case "ROI":
-          return <PiggyBankIcon sx={{ fontSize: 18, color: "#6b7280" }} />;
+          return (
+            <PiggyBankIcon sx={{ fontSize: 18, color: "text.secondary" }} />
+          );
         default:
-          return <EyeIcon sx={{ fontSize: 18, color: "#6b7280" }} />;
+          return <EyeIcon sx={{ fontSize: 18, color: "text.secondary" }} />;
       }
     })(),
   }));
 
   const getTrendIcon = (trend: MetricData["trend"]) => {
     if (trend.isNeutral) {
-      return <RemoveIcon sx={{ fontSize: 14, color: "#6b7280" }} />;
+      return <RemoveIcon sx={{ fontSize: 14, color: "text.secondary" }} />;
     }
     return trend.isPositive ? (
-      <TrendingUpIcon sx={{ fontSize: 14, color: "#10b981" }} />
+      <TrendingUpIcon sx={{ fontSize: 14, color: "success.main" }} />
     ) : (
-      <TrendingDownIcon sx={{ fontSize: 14, color: "#ef4444" }} />
+      <TrendingDownIcon sx={{ fontSize: 14, color: "error.main" }} />
     );
   };
 
   const getTrendColor = (trend: MetricData["trend"]) => {
-    if (trend.isNeutral) return "#6b7280";
-    return trend.isPositive ? "#10b981" : "#ef4444";
+    if (trend.isNeutral) return "text.secondary";
+    return trend.isPositive ? "success.main" : "error.main";
   };
 
   return (
@@ -142,7 +156,7 @@ export const MetricsOverview: React.FC = () => {
                   <Typography
                     variant="caption"
                     sx={{
-                      color: "#9ca3af",
+                      color: "text.secondary",
                       fontSize: "0.75rem",
                     }}
                   >
@@ -154,7 +168,7 @@ export const MetricsOverview: React.FC = () => {
                 <Typography
                   variant="caption"
                   sx={{
-                    color: "#9ca3af",
+                    color: "text.secondary",
                     fontSize: "0.75rem",
                     display: "block",
                   }}

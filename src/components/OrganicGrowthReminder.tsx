@@ -23,16 +23,28 @@ import { styled } from "@mui/material/styles";
 
 // Styled components for enhanced visual appeal
 const StyledCard = styled(Card)(({ theme }) => ({
-  background: "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)",
+  background:
+    theme.palette.mode === "light"
+      ? "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)"
+      : "linear-gradient(135deg, #064e3b 0%, #065f46 100%)",
   borderRadius: 16,
-  boxShadow: "0 4px 20px rgba(34, 197, 94, 0.1)",
+  boxShadow:
+    theme.palette.mode === "light"
+      ? "0 4px 20px rgba(34, 197, 94, 0.1)"
+      : "0 4px 20px rgba(34, 197, 94, 0.2)",
   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
   position: "relative",
   overflow: "hidden",
-  border: "1px solid rgba(34, 197, 94, 0.2)",
+  border:
+    theme.palette.mode === "light"
+      ? "1px solid rgba(34, 197, 94, 0.2)"
+      : "1px solid rgba(34, 197, 94, 0.3)",
   "&:hover": {
     transform: "translateY(-2px)",
-    boxShadow: "0 8px 25px rgba(34, 197, 94, 0.15)",
+    boxShadow:
+      theme.palette.mode === "light"
+        ? "0 8px 25px rgba(34, 197, 94, 0.15)"
+        : "0 8px 25px rgba(34, 197, 94, 0.25)",
   },
   "&::before": {
     content: '""',
@@ -42,7 +54,9 @@ const StyledCard = styled(Card)(({ theme }) => ({
     right: 0,
     bottom: 0,
     background:
-      "linear-gradient(45deg, rgba(34, 197, 94, 0.03) 0%, rgba(34, 197, 94, 0.01) 100%)",
+      theme.palette.mode === "light"
+        ? "linear-gradient(45deg, rgba(34, 197, 94, 0.03) 0%, rgba(34, 197, 94, 0.01) 100%)"
+        : "linear-gradient(45deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%)",
     pointerEvents: "none",
   },
 }));
@@ -76,7 +90,10 @@ const ProgressContainer = styled(Box)(({ theme }) => ({
   "& .MuiLinearProgress-root": {
     height: 6,
     borderRadius: 3,
-    backgroundColor: "rgba(34, 197, 94, 0.2)",
+    backgroundColor:
+      theme.palette.mode === "light"
+        ? "rgba(34, 197, 94, 0.2)"
+        : "rgba(34, 197, 94, 0.3)",
   },
   "& .MuiLinearProgress-bar": {
     borderRadius: 3,
@@ -85,9 +102,15 @@ const ProgressContainer = styled(Box)(({ theme }) => ({
 }));
 
 const ActionButton = styled(Button)(({ theme }) => ({
-  background: "rgba(34, 197, 94, 0.1)",
-  border: "1px solid rgba(34, 197, 94, 0.3)",
-  color: "#16a34a",
+  background:
+    theme.palette.mode === "light"
+      ? "rgba(34, 197, 94, 0.1)"
+      : "rgba(34, 197, 94, 0.2)",
+  border:
+    theme.palette.mode === "light"
+      ? "1px solid rgba(34, 197, 94, 0.3)"
+      : "1px solid rgba(34, 197, 94, 0.4)",
+  color: theme.palette.mode === "light" ? "#16a34a" : "#4ade80",
   borderRadius: 6,
   padding: "4px 10px",
   textTransform: "none",
@@ -95,7 +118,10 @@ const ActionButton = styled(Button)(({ theme }) => ({
   fontSize: "0.75rem",
   transition: "all 0.3s ease",
   "&:hover": {
-    background: "rgba(34, 197, 94, 0.15)",
+    background:
+      theme.palette.mode === "light"
+        ? "rgba(34, 197, 94, 0.15)"
+        : "rgba(34, 197, 94, 0.25)",
     transform: "translateY(-1px)",
     boxShadow: "0 2px 8px rgba(34, 197, 94, 0.2)",
   },
@@ -146,7 +172,7 @@ export const OrganicGrowthReminder: React.FC = () => {
                   <Typography
                     variant="h6"
                     sx={{
-                      color: "#1f2937",
+                      color: "text.primary",
                       fontWeight: 600,
                       fontSize: "0.875rem",
                     }}
@@ -160,7 +186,7 @@ export const OrganicGrowthReminder: React.FC = () => {
                 <Typography
                   variant="body2"
                   sx={{
-                    color: "#4b5563",
+                    color: "text.secondary",
                     mb: 1.5,
                     lineHeight: 1.5,
                     fontSize: "0.75rem",
@@ -193,9 +219,16 @@ export const OrganicGrowthReminder: React.FC = () => {
                     label="Tip: Post 3-5 times per week for best results"
                     size="small"
                     sx={{
-                      background: "rgba(34, 197, 94, 0.1)",
-                      color: "#16a34a",
-                      border: "1px solid rgba(34, 197, 94, 0.2)",
+                      background: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "rgba(34, 197, 94, 0.1)"
+                          : "rgba(34, 197, 94, 0.2)",
+                      color: (theme) =>
+                        theme.palette.mode === "light" ? "#16a34a" : "#4ade80",
+                      border: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "1px solid rgba(34, 197, 94, 0.2)"
+                          : "1px solid rgba(34, 197, 94, 0.3)",
                       "& .MuiChip-label": {
                         fontSize: "0.7rem",
                       },
@@ -215,7 +248,7 @@ export const OrganicGrowthReminder: React.FC = () => {
                   >
                     <Typography
                       variant="caption"
-                      sx={{ color: "#6b7280", fontSize: "0.7rem" }}
+                      sx={{ color: "text.secondary", fontSize: "0.7rem" }}
                     >
                       Weekly Goal Progress
                     </Typography>
@@ -223,12 +256,21 @@ export const OrganicGrowthReminder: React.FC = () => {
                       sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                     >
                       <CheckCircleIcon
-                        sx={{ fontSize: 10, color: "#16a34a" }}
+                        sx={{
+                          fontSize: 10,
+                          color: (theme) =>
+                            theme.palette.mode === "light"
+                              ? "#16a34a"
+                              : "#4ade80",
+                        }}
                       />
                       <Typography
                         variant="caption"
                         sx={{
-                          color: "#16a34a",
+                          color: (theme) =>
+                            theme.palette.mode === "light"
+                              ? "#16a34a"
+                              : "#4ade80",
                           fontWeight: 600,
                           fontSize: "0.7rem",
                         }}
@@ -257,10 +299,13 @@ export const OrganicGrowthReminder: React.FC = () => {
             <IconButton
               onClick={() => setIsVisible(false)}
               sx={{
-                color: "#9ca3af",
+                color: "text.secondary",
                 "&:hover": {
-                  color: "#6b7280",
-                  background: "rgba(34, 197, 94, 0.1)",
+                  color: "text.primary",
+                  background: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "rgba(34, 197, 94, 0.1)"
+                      : "rgba(34, 197, 94, 0.2)",
                 },
                 transition: "all 0.2s ease",
               }}

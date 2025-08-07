@@ -3,50 +3,43 @@ import {
   AppBar,
   Toolbar,
   Typography,
+  Box,
   IconButton,
   Avatar,
   Menu,
   MenuItem,
-  Box,
-  Container,
 } from "@mui/material";
-import {
-  Notifications as NotificationsIcon,
-  AccountCircle as AccountCircleIcon,
-  Logout as LogoutIcon,
-  Person as PersonIcon,
-  Settings as SettingsIcon,
-} from "@mui/icons-material";
-import { useAuth } from "../shared/hooks/useAuth";
+import { LogoutOutlined, AccountCircle } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
+import { useAuth } from "../shared/hooks/useAuth";
+import { ThemeToggle } from "../shared/components/ThemeToggle";
+import { useTheme } from "../shared/context/ThemeContext";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
-  background: "#fff",
-  color: "#000",
-  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+  background:
+    theme.palette.mode === "light"
+      ? "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
+      : "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
+  color: theme.palette.text.primary,
+  boxShadow:
+    theme.palette.mode === "light"
+      ? "0 1px 3px rgba(0, 0, 0, 0.1)"
+      : "0 1px 3px rgba(0, 0, 0, 0.3)",
+  borderBottom: `1px solid ${theme.palette.divider}`,
 }));
 
-const StyledToolbar = styled(Toolbar)(({ theme }) => ({
-  display: "flex",
-  justifyContent: "space-between",
+const StyledToolbar = styled(Toolbar)(() => ({
   maxWidth: 1350,
   margin: "0 auto",
   width: "100%",
+  padding: "0 20px",
 }));
 
-const StyledContainer = styled(Container)(({ theme }) => ({
-  paddingTop: theme.spacing(8),
-  paddingBottom: theme.spacing(2),
-  minHeight: "calc(100vh - 64px)",
-  background: "#f5f5f5",
-}));
-
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-export const Layout: React.FC<LayoutProps> = ({ children }) => {
+export const Layout: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const { user, logout } = useAuth();
+  const { mode } = useTheme();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -66,52 +59,84 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <StyledAppBar position="fixed">
         <StyledToolbar>
-          <Typography variant="h6" sx={{ fontWeight: 600, color: "#2463eb" }}>
+          <Typography
+            variant="h3"
+            sx={{
+              fontWeight: 600,
+              color: mode === "light" ? "#2463eb" : "text.primary",
+            }}
+          >
             ROIable
           </Typography>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <IconButton color="inherit">
-              <NotificationsIcon />
-            </IconButton>
+          <Box sx={{ flexGrow: 1 }} />
 
-            <IconButton onClick={handleMenu} color="inherit">
-              <Avatar src={user?.picture} sx={{ width: 32, height: 32 }}>
-                {!user?.picture && <AccountCircleIcon />}
-              </Avatar>
-            </IconButton>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <ThemeToggle />
+
+            {user && (
+              <>
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  sx={{ color: "text.primary" }}
+                >
+                  {user.picture ? (
+                    <Avatar
+                      src={user.picture}
+                      alt={user.name}
+                      sx={{ width: 32, height: 32 }}
+                    />
+                  ) : (
+                    <AccountCircle />
+                  )}
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleClose}>
+                    <Typography variant="body2">{user.name}</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>
+                    <Typography variant="body2">{user.email}</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout}>
+                    <LogoutOutlined sx={{ mr: 1 }} />
+                    <Typography variant="body2">Logout</Typography>
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
           </Box>
         </StyledToolbar>
       </StyledAppBar>
 
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          pt: 8,
+          minHeight: "calc(100vh - 64px)",
+          background: (theme) => theme.palette.background.default,
         }}
       >
-        <MenuItem onClick={handleClose}>
-          <PersonIcon sx={{ mr: 1 }} />
-          Profile
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <SettingsIcon sx={{ mr: 1 }} />
-          Settings
-        </MenuItem>
-        <MenuItem onClick={handleLogout}>
-          <LogoutIcon sx={{ mr: 1 }} />
-          Sign Out
-        </MenuItem>
-      </Menu>
-
-      <StyledContainer maxWidth={false}>{children}</StyledContainer>
+        {children}
+      </Box>
     </Box>
   );
 };

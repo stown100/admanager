@@ -35,14 +35,23 @@ import {
 
 // Styled components for enhanced visual appeal
 const StyledCard = styled(Card)(({ theme }) => ({
-  background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
+  background:
+    theme.palette.mode === "light"
+      ? "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
+      : "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
   borderRadius: 12,
-  border: "1px solid #e2e8f0",
-  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+  border: `1px solid ${theme.palette.divider}`,
+  boxShadow:
+    theme.palette.mode === "light"
+      ? "0 1px 3px rgba(0, 0, 0, 0.1)"
+      : "0 1px 3px rgba(0, 0, 0, 0.3)",
   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
   "&:hover": {
     transform: "translateY(-2px)",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+    boxShadow:
+      theme.palette.mode === "light"
+        ? "0 4px 12px rgba(0, 0, 0, 0.15)"
+        : "0 4px 12px rgba(0, 0, 0, 0.4)",
   },
 }));
 
@@ -54,26 +63,35 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
     borderSpacing: 0,
   },
   "& .MuiTableHead-root .MuiTableRow-root": {
-    background: "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)",
+    background:
+      theme.palette.mode === "light"
+        ? "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)"
+        : "linear-gradient(135deg, #475569 0%, #334155 100%)",
   },
   "& .MuiTableHead-root .MuiTableCell-root": {
-    borderBottom: "2px solid #e2e8f0",
+    borderBottom: `2px solid ${theme.palette.divider}`,
     fontWeight: 600,
     fontSize: "0.875rem",
-    color: "#6b7280",
+    color: theme.palette.text.secondary,
     padding: "16px",
   },
   "& .MuiTableBody-root .MuiTableRow-root": {
     transition: "all 0.2s ease",
     "&:hover": {
-      background: "rgba(59, 130, 246, 0.05)",
+      background:
+        theme.palette.mode === "light"
+          ? "rgba(59, 130, 246, 0.05)"
+          : "rgba(59, 130, 246, 0.1)",
     },
     "&:nth-of-type(even)": {
-      background: "rgba(0, 0, 0, 0.02)",
+      background:
+        theme.palette.mode === "light"
+          ? "rgba(0, 0, 0, 0.02)"
+          : "rgba(255, 255, 255, 0.02)",
     },
   },
   "& .MuiTableBody-root .MuiTableCell-root": {
-    borderBottom: "1px solid #f3f4f6",
+    borderBottom: `1px solid ${theme.palette.divider}`,
     padding: "16px",
     fontSize: "0.875rem",
   },
@@ -87,7 +105,7 @@ const PlatformCell = styled(Box)(({ theme }) => ({
 
 const MetricValue = styled(Typography)(({ theme }) => ({
   fontWeight: 600,
-  color: "#1f2937",
+  color: theme.palette.text.primary,
 }));
 
 const StatusChip = styled(Chip, {
@@ -96,7 +114,10 @@ const StatusChip = styled(Chip, {
   fontSize: "0.75rem",
   height: 24,
   fontWeight: 600,
-  background: $status === "Active" ? "#10b981" : "#ef4444",
+  background:
+    $status === "Active"
+      ? theme.palette.success.main
+      : theme.palette.error.main,
   color: "#ffffff",
   "& .MuiChip-label": {
     padding: "0 8px",
@@ -107,11 +128,11 @@ export const PlatformComparison: React.FC = () => {
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case "up":
-        return <TrendingUpIcon sx={{ fontSize: 16, color: "#10b981" }} />;
+        return <TrendingUpIcon sx={{ fontSize: 16, color: "success.main" }} />;
       case "down":
-        return <TrendingDownIcon sx={{ fontSize: 16, color: "#ef4444" }} />;
+        return <TrendingDownIcon sx={{ fontSize: 16, color: "error.main" }} />;
       default:
-        return <RemoveIcon sx={{ fontSize: 16, color: "#6b7280" }} />;
+        return <RemoveIcon sx={{ fontSize: 16, color: "text.secondary" }} />;
     }
   };
 
@@ -122,7 +143,7 @@ export const PlatformComparison: React.FC = () => {
           <CardHeader
             title={
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <AssessmentIcon sx={{ fontSize: 24, color: "#3b82f6" }} />
+                <AssessmentIcon sx={{ fontSize: 24, color: "primary.main" }} />
                 <Typography variant="h6" sx={{ fontWeight: 600 }}>
                   Platform Performance Comparison
                 </Typography>
@@ -207,7 +228,7 @@ export const PlatformComparison: React.FC = () => {
                           <TableCell align="right">
                             <MetricValue
                               variant="body2"
-                              sx={{ color: "#10b981" }}
+                              sx={{ color: "success.main" }}
                             >
                               {row.roi}x
                             </MetricValue>
@@ -239,8 +260,8 @@ export const PlatformComparison: React.FC = () => {
                                   sx={{
                                     color:
                                       row.status === "Active"
-                                        ? "#ef4444"
-                                        : "#10b981",
+                                        ? "error.main"
+                                        : "success.main",
                                     "&:hover": {
                                       backgroundColor:
                                         row.status === "Active"
@@ -259,7 +280,7 @@ export const PlatformComparison: React.FC = () => {
                               <Tooltip title="More Options">
                                 <IconButton
                                   size="small"
-                                  sx={{ color: "#6b7280" }}
+                                  sx={{ color: "text.secondary" }}
                                 >
                                   <MoreVertIcon sx={{ fontSize: 16 }} />
                                 </IconButton>

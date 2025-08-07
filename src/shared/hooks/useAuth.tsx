@@ -11,6 +11,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  isLoggingIn: boolean;
   loginWithGoogle: () => Promise<void>;
   logout: () => void;
 }
@@ -30,6 +31,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Check for existing user data on mount
   useEffect(() => {
@@ -53,7 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const loginWithGoogle = async () => {
-    setIsLoading(true);
+    setIsLoggingIn(true);
     try {
       // Check if Google Identity Services is loaded
       if (!window.google) {
@@ -96,11 +98,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
               setUser(userData);
               localStorage.setItem("roiable_user", JSON.stringify(userData));
-              setIsLoading(false);
+              setIsLoggingIn(false);
               resolve();
             } catch (error) {
               console.error("Error processing Google response:", error);
-              setIsLoading(false);
+              setIsLoggingIn(false);
               reject(new Error("Failed to process user data. Please try again."));
             }
           },
@@ -113,13 +115,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           accounts.id.prompt();
         } catch (error) {
           console.error("Error starting authentication:", error);
-          setIsLoading(false);
+          setIsLoggingIn(false);
           reject(new Error("Failed to start authentication process. Please try again."));
         }
       });
     } catch (error) {
       console.error("Google login error:", error);
-      setIsLoading(false);
+      setIsLoggingIn(false);
 
       // More detailed error messages
       if (error instanceof Error) {
@@ -151,6 +153,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const logout = () => {
     setUser(null);
     setIsLoading(false);
+    setIsLoggingIn(false);
     localStorage.removeItem("roiable_user");
 
     // Remove Google Sign-In container
@@ -169,6 +172,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     user,
     isAuthenticated: !!user,
     isLoading,
+    isLoggingIn,
     loginWithGoogle,
     logout,
   };

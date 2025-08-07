@@ -19,22 +19,32 @@ import {
 } from "recharts";
 import { TrendingUp as TrendingUpIcon } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
+import { useTheme } from "@/shared/context/ThemeContext";
 import { performanceData } from "@/shared/data/mockData";
 
 // Styled components for enhanced visual appeal
 const StyledCard = styled(Card)(({ theme }) => ({
-  background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
+  background:
+    theme.palette.mode === "light"
+      ? "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
+      : "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
   borderRadius: 12,
-  border: "1px solid #e2e8f0",
-  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+  border: `1px solid ${theme.palette.divider}`,
+  boxShadow:
+    theme.palette.mode === "light"
+      ? "0 1px 3px rgba(0, 0, 0, 0.1)"
+      : "0 1px 3px rgba(0, 0, 0, 0.3)",
   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
   "&:hover": {
     transform: "translateY(-2px)",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+    boxShadow:
+      theme.palette.mode === "light"
+        ? "0 4px 12px rgba(0, 0, 0, 0.15)"
+        : "0 4px 12px rgba(0, 0, 0, 0.4)",
   },
 }));
 
-const ChartContainer = styled(Box)(({ theme }) => ({
+const ChartContainer = styled(Box)(() => ({
   height: 300,
   width: "100%",
 }));
@@ -44,11 +54,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return (
       <Box
         sx={{
-          background: "#ffffff",
-          border: "1px solid #e2e8f0",
+          background: (theme) => theme.palette.background.paper,
+          border: (theme) => `1px solid ${theme.palette.divider}`,
           borderRadius: 2,
           p: 2,
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          boxShadow: (theme) =>
+            theme.palette.mode === "light"
+              ? "0 4px 12px rgba(0, 0, 0, 0.1)"
+              : "0 4px 12px rgba(0, 0, 0, 0.3)",
         }}
       >
         <Typography variant="body2" sx={{ fontWeight: 600, mb: 1 }}>
@@ -67,7 +80,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                 backgroundColor: entry.color,
               }}
             />
-            <Typography variant="body2" sx={{ color: "#6b7280" }}>
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
               {entry.name}: {entry.value.toLocaleString()}
             </Typography>
           </Box>
@@ -79,13 +92,16 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export const PerformanceChart: React.FC = () => {
+  const { mode } = useTheme();
+  const isDark = mode === "dark";
+
   return (
     <Grow in timeout={800}>
       <StyledCard>
         <CardHeader
           title={
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <TrendingUpIcon sx={{ fontSize: 24, color: "#3b82f6" }} />
+              <TrendingUpIcon sx={{ fontSize: 24, color: "primary.main" }} />
               <Typography variant="h6" sx={{ fontWeight: 600 }}>
                 Performance Overview
               </Typography>
@@ -176,20 +192,20 @@ export const PerformanceChart: React.FC = () => {
 
                 <CartesianGrid
                   strokeDasharray="3 3"
-                  stroke="hsl(240 5.9% 90%)"
+                  stroke={isDark ? "hsl(240 5.9% 10%)" : "hsl(240 5.9% 90%)"}
                   opacity={0.5}
                 />
 
                 <XAxis
                   dataKey="name"
-                  stroke="hsl(240 3.8% 46.1%)"
+                  stroke={isDark ? "hsl(240 5.9% 90%)" : "hsl(240 3.8% 46.1%)"}
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
                 />
 
                 <YAxis
-                  stroke="hsl(240 3.8% 46.1%)"
+                  stroke={isDark ? "hsl(240 5.9% 90%)" : "hsl(240 3.8% 46.1%)"}
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}

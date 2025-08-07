@@ -11,14 +11,43 @@ import {
 } from "@mui/material";
 import { Google as GoogleIcon } from "@mui/icons-material";
 import { useAuth } from "../../shared/hooks/useAuth";
+import { useTheme } from "../../shared/context/ThemeContext";
+import { styled } from "@mui/material/styles";
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  width: "100%",
+  maxWidth: 400,
+  background: theme.palette.mode === 'light'
+    ? "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
+    : "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
+  border: `1px solid ${theme.palette.divider}`,
+  boxShadow: theme.palette.mode === 'light'
+    ? "0 8px 32px rgba(0,0,0,0.1)"
+    : "0 8px 32px rgba(0,0,0,0.3)",
+  borderRadius: 12,
+}));
+
+const AuthButton = styled(Button)(({ theme }) => ({
+  height: 48,
+  backgroundColor: "#4285f4",
+  "&:hover": {
+    backgroundColor: "#3367d6",
+  },
+  "&:disabled": {
+    backgroundColor: theme.palette.mode === 'light' 
+      ? "rgba(66, 133, 244, 0.6)" 
+      : "rgba(66, 133, 244, 0.4)",
+  },
+}));
 
 export const AuthPage: React.FC = () => {
   const {
     loginWithGoogle,
     isAuthenticated,
     isLoading: globalLoading,
+    isLoggingIn,
   } = useAuth();
-  const [isFormLoading, setIsFormLoading] = useState(false);
+  const { mode } = useTheme();
   const [error, setError] = useState<string | null>(null);
 
   // Auto redirect when authenticated
@@ -30,7 +59,6 @@ export const AuthPage: React.FC = () => {
 
   const handleGoogleLogin = async () => {
     setError(null);
-    setIsFormLoading(true);
 
     try {
       await loginWithGoogle();
@@ -42,8 +70,6 @@ export const AuthPage: React.FC = () => {
           ? error.message
           : "An error occurred during login. Please try again."
       );
-    } finally {
-      setIsFormLoading(false);
     }
   };
 
@@ -56,7 +82,9 @@ export const AuthPage: React.FC = () => {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          background: mode === 'light'
+            ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+            : "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
         }}
       >
         <CircularProgress size={60} />
@@ -71,21 +99,16 @@ export const AuthPage: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        background: mode === 'light'
+          ? "rgb(245, 245, 245)"
+          : "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
         padding: "20px",
       }}
     >
-      <Card
-        sx={{
-          width: "100%",
-          maxWidth: 400,
-          boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-          borderRadius: 3,
-        }}
-      >
+      <StyledCard>
         <CardContent sx={{ p: 4 }}>
           <Box sx={{ textAlign: "center", mb: 4 }}>
-            <Typography variant="h4" sx={{ mb: 1 }}>
+            <Typography variant="h4" sx={{ mb: 1, color: "text.primary" }}>
               Welcome
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -93,23 +116,22 @@ export const AuthPage: React.FC = () => {
             </Typography>
           </Box>
 
-          <Button
+          <AuthButton
             variant="contained"
             size="large"
-            startIcon={<GoogleIcon />}
+            startIcon={
+              isLoggingIn ? (
+                <CircularProgress size={20} color="inherit" />
+              ) : (
+                <GoogleIcon />
+              )
+            }
             onClick={handleGoogleLogin}
-            disabled={isFormLoading}
+            disabled={isLoggingIn}
             fullWidth
-            sx={{
-              height: 48,
-              backgroundColor: "#4285f4",
-              "&:hover": {
-                backgroundColor: "#3367d6",
-              },
-            }}
           >
-            {isFormLoading ? "Signing in..." : "Sign in with Google"}
-          </Button>
+            {isLoggingIn ? "Signing in..." : "Sign in with Google"}
+          </AuthButton>
 
           {error && (
             <Alert
@@ -139,7 +161,7 @@ export const AuthPage: React.FC = () => {
             </Typography>
           </Box>
         </CardContent>
-      </Card>
+      </StyledCard>
     </Box>
   );
 };
